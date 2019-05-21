@@ -21,10 +21,10 @@ const ctxVirus = canvasVirus.getContext('2d')
 ctxVirus.width = canvasVirus.width = 500
 ctxVirus.height = canvasVirus.height = 300
 
-let pressureVal = 0.9 
+let pressureVal = 0.6
 let cellsVal = 0.5
 let bacteriaVal = 0.01
-let virusVal = 0.1
+let virusVal = 0.02
 let healthVal = 1
 let ttlVal = 0
 
@@ -32,23 +32,25 @@ const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
 const CELL_MIN = 0.2
 const CELL_MAX = 0.999
-const BACTERIA_LOW = 0.002
-const BACTERIA_HIGH = 0.09
+const BACTERIA_LOW = 0.02
+const BACTERIA_HIGH = 0.3
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.5
+
+let alive = true
 
 function draw(ctx, fill) {
   ctx.beginPath()
   ctx.fillStyle = fill
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 100, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 100, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 70, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 60, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 50, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
   ctx.fill()
 }
 
 function render() {
-  pressureVal = Math.cos(pressureVal * (cellsVal / pressureVal))
+  pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
   let cellsRandom = Math.random() * cellsVal
   cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
   
@@ -70,10 +72,12 @@ function render() {
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
     pressureVal = 0.0
+    alive = false
   }
   
   if (cellsVal < 0.000001 || isNaN(cellsVal)) {
-    cellsVal = 0.000001
+    cellsVal = 0.0
+    alive = false
   }
   
   if (bacteriaVal < 0.000001 || isNaN(bacteriaVal)) {
@@ -108,22 +112,27 @@ function render() {
       healthVal -= pressureVal * 100 * virusVal
     }
     
-    if (pressureVal < 0.0) {
+    if (pressureVal < 0.001) {
       healthVal = 0
+      alive = false
     } else {
       healthVal--
     }
-  } 
+  } else {
+    healthVal++
+  }
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
-    healthVal++
+   // healthVal++
   }
   
   health.textContent = healthVal
   ttlVal++
   
-  if (healthVal < 1) {
+  if (healthVal < 1 || !alive) {
+    ctxPressure.fillStyle = 'black'
+    ctxPressure.fill()
     health.textContent = 'DEAD.'
   } else {
     ttl.textContent = ttlVal
@@ -136,7 +145,7 @@ function render() {
       ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
     }
     
-    if (ttlVal % Math.round(pressureVal * 700) === 0) {
+    if (ttlVal % Math.round(pressureVal * 1700) === 0) {
       ctxBacteria.clearRect(0, 0, ctxBacteria.width, ctxBacteria.height)
       ctxVirus.clearRect(0, 0, ctxVirus.width, ctxVirus.height)
     }
