@@ -60,7 +60,7 @@ function render() {
     cellsVal -= bacteriaVal * cellsVal 
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
     bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-    cellsVal -= bacteriaVal * cellsVal + 0.5
+    cellsVal -= bacteriaVal * cellsVal + cellsVal / 5
   }
   
   const virusRandom = Math.random()
