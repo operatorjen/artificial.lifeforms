@@ -4,15 +4,15 @@ const bacteria = document.querySelector('#bacteria span')
 const virus = document.querySelector('#virus span')
 const health = document.querySelector('#health')
 const ttl = document.querySelector('time')
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
-ctx.width = canvas.width = 500
-ctx.height = canvas.height = 300
+const canvasPressure = document.querySelector('#pressure-cv')
+const ctxPressure = canvasPressure.getContext('2d')
+ctxPressure.width = canvasPressure.width = 500
+ctxPressure.height = canvasPressure.height = 300
 
 let pressureVal = 0.9 
 let cellsVal = 0.5
 let bacteriaVal = 0.001
-let virusVal = 0.001
+let virusVal = 0.01
 let healthVal = 1
 let ttlVal = 0
 
@@ -43,23 +43,23 @@ function render() {
   } else if (bacteriaRandom > BACTERIA_LOW) {
     virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 1500)))
   } else {
-    virusVal = Math.sin(virusVal - (virusVal / (bacteriaRandom * cellsVal * 500)))
+    virusVal = Math.sin(virusVal - (virusVal / (bacteriaRandom * cellsVal * 1000)))
   }
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
     pressureVal = 0.0
   }
   
-  if (cellsVal < 0.0 || isNaN(cellsVal)) {
-    cellsVal = 0.0
+  if (cellsVal < 0.000001 || isNaN(cellsVal)) {
+    cellsVal = 0.000001
   }
   
-  if (bacteriaVal < 0.0 || isNaN(bacteriaVal)) {
-    bacteriaVal = 0.0
+  if (bacteriaVal < 0.000001 || isNaN(bacteriaVal)) {
+    bacteriaVal = 0.000001
   }
   
-  if (virusVal < 0.0 || isNaN(virusVal)) {
-    virusVal = 0.0
+  if (virusVal < 0.000001 || isNaN(virusVal)) {
+    virusVal = 0.000001
   }
   
   pressure.textContent = pressureVal

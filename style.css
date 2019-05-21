@@ -39,4 +39,7 @@ canvas {
   border: 1px solid #f00;
   width: 500px;
   height: 300px;
+  position: fixed;
+  top: 260px;
+  left: 20px;
 }
