@@ -6,6 +6,8 @@ const health = document.querySelector('#health')
 const ttl = document.querySelector('time')
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+ctx.width = canvas.width = 500
+ctx.height = canvas.height = 300
 
 let pressureVal = 0.9 
 let cellsVal = 0.9
@@ -65,6 +67,14 @@ function render() {
   bacteria.textContent = bacteriaVal
   virus.textContent = virusVal
   
+  ctx.beginPath()
+  ctx.fillStyle = 'rgba(200, 10, 200, 0.5)'
+  ctx.arc(Math.random() * 60 + 20, Math.random() * 75 + 50, pressureVal * 50, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * 80 + 40, Math.random() * 75 + 50, cellsVal * 50, 0, 2 * Math.PI)
+  ctx.arc(180, 75, bacteriaVal * 1000, 0, 2 * Math.PI)
+  ctx.arc(230, 75, virusVal * 1000, 0, 2 * Math.PI)
+  ctx.fill()
+  
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
@@ -96,6 +106,7 @@ function render() {
     ttl.textContent = ttlVal
     setTimeout(() => {
       requestAnimationFrame(render)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
     }, 500)
   }
 
