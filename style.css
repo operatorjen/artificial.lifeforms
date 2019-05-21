@@ -11,9 +11,9 @@ div {
   padding: 5px;
 }
 
-div, span {
-  line-height: 1rem;
-  font-size: 1rem;
+div, span, time {
+  line-height: 1.3rem;
+  font-size: 1.5rem;
 }
 
 span {
@@ -26,4 +26,11 @@ span {
 label {
   width: 90px;
   display: inline-block;
+}
+
+time {
+  border: 1px solid #f0f;
+  padding: 5px;
+  margin: 1px;
+  display: block;
 }
