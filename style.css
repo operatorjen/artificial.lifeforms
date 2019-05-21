@@ -5,7 +5,25 @@ body {
   margin: 2em;
 }
 
-h1 {
-  font-style: italic;
-  color: #373fff;
+div {
+  border: 1px solid #000;
+  margin: 1px;
+  padding: 5px;
+}
+
+div, span {
+  line-height: 1rem;
+  font-size: 1rem;
+}
+
+span {
+  border: 1px solid #aa19a1;
+  padding: 1px;
+  margin: 1px;
+  display: inline-block;
+}
+
+label {
+  width: 90px;
+  display: inline-block;
 }
