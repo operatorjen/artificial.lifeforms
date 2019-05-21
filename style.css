@@ -37,8 +37,8 @@ time {
 
 canvas {
   border: 1px solid #f00;
-  width: 500px;
-  height: 300px;
+  width: 1000px;
+  height: 500px;
   position: fixed;
   top: 260px;
   left: 20px;
