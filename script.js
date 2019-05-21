@@ -10,7 +10,7 @@ ctx.width = canvas.width = 500
 ctx.height = canvas.height = 300
 
 let pressureVal = 0.9 
-let cellsVal = 0.9
+let cellsVal = 0.5
 let bacteriaVal = 0.001
 let virusVal = 0.001
 let healthVal = 1
@@ -20,30 +20,30 @@ const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
 const CELL_MIN = 0.2
 const CELL_MAX = 0.999
-const BACTERIA_LOW = 0.2
-const BACTERIA_HIGH = 0.6
+const BACTERIA_LOW = 0.002
+const BACTERIA_HIGH = 0.09
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.05
 
 function render() {
-  pressureVal = Math.cos(pressureVal * (cellsVal / pressureVal))
+  pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
   let cellsRandom = Math.random() * cellsVal
-  cellsVal = Math.cos((pressureVal + (bacteriaVal * virusVal)) * cellsVal)
+  cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
   
   const bacteriaRandom = Math.random()
   if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
-    bacteriaVal = Math.sin(bacteriaVal + (bacteriaVal / (1 * bacteriaRandom * 1500)))
+    bacteriaVal = Math.sin(bacteriaVal + (bacteriaVal / (1 * bacteriaRandom * 2500)))
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
     bacteriaVal = Math.sin(bacteriaVal + (bacteriaVal / (1 * bacteriaRandom * 1000)))
   }
   
   const virusRandom = Math.random()
   if (bacteriaRandom >= BACTERIA_HIGH) {
-    virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 1000)))
+    virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 2000)))
   } else if (bacteriaRandom > BACTERIA_LOW) {
     virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 1500)))
   } else {
-    virusVal = Math.sin(virusVal - (virusVal / (bacteriaRandom * cellsVal * 2500)))
+    virusVal = Math.sin(virusVal - (virusVal / (bacteriaRandom * cellsVal * 500)))
   }
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
@@ -68,11 +68,11 @@ function render() {
   virus.textContent = virusVal
   
   ctx.beginPath()
-  ctx.fillStyle = 'rgba(200, 10, 200, 0.5)'
+  ctx.fillStyle = 'rgba(220, 101, 100, 0.05)'
   ctx.arc(Math.random() * 60 + 20, Math.random() * 75 + 50, pressureVal * 50, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * 80 + 40, Math.random() * 75 + 50, cellsVal * 50, 0, 2 * Math.PI)
-  ctx.arc(180, 75, bacteriaVal * 1000, 0, 2 * Math.PI)
-  ctx.arc(230, 75, virusVal * 1000, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * 80 + 40, Math.random() * 85 + 50, cellsVal * 50, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * 280 + 40, Math.random() * 85 + 50, bacteriaVal * 1000, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * 290 + 30, Math.random() * 85 + 50, virusVal * 1000, 0, 2 * Math.PI)
   ctx.fill()
   
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
@@ -104,10 +104,8 @@ function render() {
     health.textContent = 'DEAD.'
   } else {
     ttl.textContent = ttlVal
-    setTimeout(() => {
-      requestAnimationFrame(render)
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-    }, 500)
+    requestAnimationFrame(render)
+    //ctx.clearRect(0, 0, ctx.width, ctx.height)
   }
 
 }
