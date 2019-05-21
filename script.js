@@ -18,11 +18,11 @@ ctxBacteria.width = canvasBacteria.width = 500
 ctxBacteria.height = canvasBacteria.height = 300
 const canvasVirus = document.querySelector('#virus-cv')
 const ctxVirus = canvasVirus.getContext('2d')
-ctxVirus.width = canvasVirus.width = 500
-ctxVirus.height = canvasVirus.height = 300
+ctxVirus.width = canvasVirus.width = 1000
+ctxVirus.height = canvasVirus.height = 500
 
 let pressureVal = 0.6
-let cellsVal = 0.5
+let cellsVal = 0.9
 let bacteriaVal = 0.01
 let virusVal = 0.02
 let healthVal = 1
@@ -56,18 +56,21 @@ function render() {
   
   const bacteriaRandom = Math.random()
   if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
-    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (1 * bacteriaRandom * 2500)))
+    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
+    cellsVal -= bacteriaVal * cellsVal 
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
-    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (1 * bacteriaRandom * 1000)))
+    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
+    cellsVal -= bacteriaVal * cellsVal + 0.5
   }
   
   const virusRandom = Math.random()
   if (bacteriaRandom >= BACTERIA_HIGH) {
-    virusVal = Math.sin(virusVal + (bacteriaVal * (1 * virusRandom * 1000)))
+    virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
+    healthVal --
   } else if (bacteriaRandom > BACTERIA_LOW) {
-    virusVal = Math.sin(virusVal - (bacteriaVal * (1 * virusRandom * 1000)))
+    virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
   } else {
-    virusVal = Math.sin(virusVal + (bacteriaVal * (1 * virusRandom * 1000)))
+    virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
   }
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
@@ -101,30 +104,26 @@ function render() {
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
-      healthVal -= pressureVal * 60 * cellsVal
+      healthVal = healthVal - (pressureVal * 1500 * cellsVal)
     }
     
     if (pressureVal >= PRESSURE_MAX) {
-      healthVal -= pressureVal * 100 * cellsVal
+      healthVal = healthVal - (pressureVal * 10000 * cellsVal)
     }
     
     if (virusVal >= VIRUS_HIGH) {
-      healthVal -= pressureVal * 100 * virusVal
+      healthVal = healthVal - (pressureVal * 10000 * virusVal)
     }
     
-    if (pressureVal < 0.001) {
+    if (pressureVal < 0.0001) {
       healthVal = 0
       alive = false
-    } else {
-      healthVal--
     }
-  } else {
-    healthVal++
-  }
+  } 
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
-   // healthVal++
+    healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal * virusVal))
   }
   
   health.textContent = healthVal

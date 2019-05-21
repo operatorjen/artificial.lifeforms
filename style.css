@@ -2,12 +2,11 @@
 
 body {
   font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
-  margin: 2em;
+  margin: 0;
+  background-color: #111;
 }
 
 div {
-  border: 1px solid #000;
-  margin: 1px;
   padding: 5px;
 }
 
@@ -17,29 +16,30 @@ div, span, time {
 }
 
 span {
-  border: 1px solid #aa19a1;
   padding: 1px;
   margin: 1px;
   display: inline-block;
+  color: #fff;
 }
 
 label {
-  width: 90px;
+  width: 95px;
   display: inline-block;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 time {
+  background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid #f0f;
   padding: 5px;
   margin: 1px;
-  display: block;
+  display: inline-block;
 }
 
 canvas {
-  border: 1px solid #f00;
-  width: 1000px;
-  height: 500px;
-  position: fixed;
-  top: 260px;
-  left: 20px;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
