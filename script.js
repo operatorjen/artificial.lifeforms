@@ -35,7 +35,7 @@ const CELL_MAX = 0.999
 const BACTERIA_LOW = 0.002
 const BACTERIA_HIGH = 0.09
 const VIRUS_LOW = 0.002
-const VIRUS_HIGH = 0.05
+const VIRUS_HIGH = 0.5
 
 function draw(ctx, fill) {
   ctx.beginPath()
@@ -48,24 +48,24 @@ function draw(ctx, fill) {
 }
 
 function render() {
-  pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
+  pressureVal = Math.cos(pressureVal * (cellsVal / pressureVal))
   let cellsRandom = Math.random() * cellsVal
   cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
   
   const bacteriaRandom = Math.random()
   if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
-    bacteriaVal = Math.sin(bacteriaVal + (bacteriaVal / (1 * bacteriaRandom * 2500)))
+    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (1 * bacteriaRandom * 2500)))
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
-    bacteriaVal = Math.sin(bacteriaVal + (bacteriaVal / (1 * bacteriaRandom * 1000)))
+    bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (1 * bacteriaRandom * 1000)))
   }
   
   const virusRandom = Math.random()
   if (bacteriaRandom >= BACTERIA_HIGH) {
-    virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 2000)))
+    virusVal = Math.sin(virusVal + (bacteriaVal * (1 * virusRandom * 1000)))
   } else if (bacteriaRandom > BACTERIA_LOW) {
-    virusVal = Math.sin(virusVal + (virusVal / (bacteriaRandom * cellsVal * 1500)))
+    virusVal = Math.sin(virusVal - (bacteriaVal * (1 * virusRandom * 1000)))
   } else {
-    virusVal = Math.sin(virusVal - (virusVal / (bacteriaRandom * cellsVal * 1000)))
+    virusVal = Math.sin(virusVal + (bacteriaVal * (1 * virusRandom * 1000)))
   }
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
@@ -89,19 +89,23 @@ function render() {
   bacteria.textContent = bacteriaVal
   virus.textContent = virusVal
   
-  draw(ctxPressure, `rgba(200, 100, 10, 0.02)``)
+  draw(ctxPressure, `rgba(200, 100, 10, ${pressureVal * 0.01})`)
   draw(ctxCells, `rgba(220, 10, 110, ${cellsVal * 0.01})`)
-  draw(ctxBacteria, `rgba(20, 200, 120, ${bacteriaVal * 0.001})``)
-  draw(ctxVirus, `rgba(20, 200, 230, ${cellsVal * 0.01})``)
+  draw(ctxBacteria, `rgba(20, 200, 120, ${bacteriaVal * 0.01})`)
+  draw(ctxVirus, `rgba(20, 200, 230, ${virusVal * 0.01})`)
   
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
-      healthVal -= .3 * cellsVal
+      healthVal -= 10.3 * cellsVal
     }
     
     if (pressureVal >= PRESSURE_MAX) {
-      healthVal -= .6 * cellsVal
+      healthVal -= 10.6 * cellsVal
+    }
+    
+    if (virusVal >= VIRUS_HIGH) {
+      healthVal -= 10.9 * virusVal
     }
     
     if (pressureVal < 0.0) {
@@ -124,7 +128,18 @@ function render() {
   } else {
     ttl.textContent = ttlVal
     requestAnimationFrame(render)
-    //ctx.clearRect(0, 0, ctx.width, ctx.height)
+    if (ttlVal % 1000 === 0) {
+      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
+    }
+    
+    if (ttlVal % 2700 === 0) {
+      ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
+    }
+    
+    if (ttlVal % 3900 === 0) {
+      ctxBacteria.clearRect(0, 0, ctxBacteria.width, ctxBacteria.height)
+      ctxVirus.clearRect(0, 0, ctxVirus.width, ctxVirus.height)
+    }
   }
 
 }
