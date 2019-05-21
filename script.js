@@ -4,18 +4,20 @@ const bacteria = document.querySelector('#bacteria span')
 const virus = document.querySelector('#virus span')
 const health = document.querySelector('#health')
 const ttl = document.querySelector('time')
+const canvas = document.querySelector('canvas')
+const ctx = canvas.getContext('2d')
 
 let pressureVal = 0.9 
 let cellsVal = 0.9
-let bacteriaVal = 0.01
+let bacteriaVal = 0.001
 let virusVal = 0.001
-let healthVal = 10
+let healthVal = 1
 let ttlVal = 0
 
 const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
-const CELL_MIN = 0.20
-const CELL_MAX = 1.00
+const CELL_MIN = 0.2
+const CELL_MAX = 0.999
 const BACTERIA_LOW = 0.2
 const BACTERIA_HIGH = 0.6
 const VIRUS_LOW = 0.002
@@ -24,7 +26,7 @@ const VIRUS_HIGH = 0.05
 function render() {
   pressureVal = Math.cos(pressureVal * (cellsVal / pressureVal))
   let cellsRandom = Math.random() * cellsVal
-  cellsVal = Math.cos(cellsVal - (bacteriaVal / virusVal) * cellsVal * pressureVal)
+  cellsVal = Math.cos((pressureVal + (bacteriaVal * virusVal)) * cellsVal)
   
   const bacteriaRandom = Math.random()
   if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
@@ -66,19 +68,22 @@ function render() {
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
-      healthVal -= .2 * cellsVal
-    }
-    
-    if (pressureVal >= PRESSURE_MAX) {
       healthVal -= .3 * cellsVal
     }
     
-    healthVal--
+    if (pressureVal >= PRESSURE_MAX) {
+      healthVal -= .6 * cellsVal
+    }
+    
+    if (pressureVal < 0.0) {
+      healthVal = 0
+    } else {
+      healthVal--
+    }
   } 
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
-    
     healthVal++
   }
   
@@ -89,7 +94,9 @@ function render() {
     health.textContent = 'DEAD.'
   } else {
     ttl.textContent = ttlVal
-    requestAnimationFrame(render)
+    setTimeout(() => {
+      requestAnimationFrame(render)
+    }, 500)
   }
 
 }
