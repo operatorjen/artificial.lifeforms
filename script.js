@@ -8,9 +8,21 @@ const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
 ctxPressure.height = canvasPressure.height = 300
+const canvasCells = document.querySelector('#cells-cv')
+const ctxCells = canvasCells.getContext('2d')
+ctxCells.width = canvasCells.width = 500
+ctxCells.height = canvasCells.height = 300
+const canvasBacteria = document.querySelector('#bacteria-cv')
+const ctxBacteria = canvasBacteria.getContext('2d')
+ctxBacteria.width = canvasBacteria.width = 500
+ctxBacteria.height = canvasBacteria.height = 300
+const canvasVirus = document.querySelector('#virus-cv')
+const ctxVirus = canvasVirus.getContext('2d')
+ctxVirus.width = canvasVirus.width = 500
+ctxVirus.height = canvasVirus.height = 300
 
 let pressureVal = 0.9 
-let cellsVal = 0.5
+let cellsVal = 0.9
 let bacteriaVal = 0.001
 let virusVal = 0.01
 let healthVal = 1
@@ -24,6 +36,16 @@ const BACTERIA_LOW = 0.002
 const BACTERIA_HIGH = 0.09
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.05
+
+function draw(ctx, fill) {
+  ctx.beginPath()
+  ctx.fillStyle = fill
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 50, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 50, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 1000, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 1000, 0, 2 * Math.PI)
+  ctx.fill()
+}
 
 function render() {
   pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
@@ -67,13 +89,10 @@ function render() {
   bacteria.textContent = bacteriaVal
   virus.textContent = virusVal
   
-  ctx.beginPath()
-  ctx.fillStyle = 'rgba(220, 101, 100, 0.05)'
-  ctx.arc(Math.random() * 60 + 20, Math.random() * 75 + 50, pressureVal * 50, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * 80 + 40, Math.random() * 85 + 50, cellsVal * 50, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * 280 + 40, Math.random() * 85 + 50, bacteriaVal * 1000, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * 290 + 30, Math.random() * 85 + 50, virusVal * 1000, 0, 2 * Math.PI)
-  ctx.fill()
+  draw(ctxPressure, `rgba(200, 100, 10, 0.02)``)
+  draw(ctxCells, `rgba(220, 10, 110, ${cellsVal * 0.01})`)
+  draw(ctxBacteria, `rgba(20, 200, 120, ${bacteriaVal * 0.001})``)
+  draw(ctxVirus, `rgba(20, 200, 230, ${cellsVal * 0.01})``)
   
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
