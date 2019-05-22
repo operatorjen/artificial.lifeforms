@@ -59,13 +59,13 @@ const fluid = function () {
   let numX, numY, particles, 
       grid, textures, numParticles
 
-  const threshold = 110
-  const spacing = 10
+  const threshold = 100
+  const spacing = 5
   const radius = 10
   const limit = radius 
 
   const run = function () {
-    metaCtx.clearRect(0, 0, width, height)
+    //metaCtx.clearRect(0, 0, width, height)
     
     pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
     let cellsRandom = Math.random() * cellsVal
@@ -202,7 +202,7 @@ const fluid = function () {
       health.textContent = 'no'
       ttl.textContent = ttlVal
       btn.disabled = ''
-      cellsVal = 0.0
+      
       pressureVal = 0.0
 
       let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
@@ -372,25 +372,21 @@ const fluid = function () {
       metaCtx = metaCanvas.getContext('2d')
 
       for (let i = 0; i < GROUPS.length; i++) {
-        let color = 'hsla(360, 80%, 80%';
+        let color = 'hsla(331, 100%, 64%';
         let color2 = 'hsla(57, 75%, 64%';
-
-        if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 3) {
-          color = 'hsla(186, 100%, 42%';
-        } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 2) {
-          color = 'hsla(186, 100%, 42%';
-        } else {
-          color = 'hsla(331, 100%, 64%';
-        }
         
-        if (virusVal >= VIRUS_HIGH) {
+        if (virusVal >= VIRUS_HIGH || cellsVal < CELL_MIN) {
           color = 'hsla(157, 100%, 44%';
           color2 = 'hsla(157, 75%, 64%';
-        }
-        
-        if (bacteriaVal >= BACTERIA_HIGH) {
+        } else if (bacteriaVal >= BACTERIA_HIGH || cellsVal < CELL_MIN) {
           color2 = 'hsla(84, 86%, 42%';
         }
+        
+        if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
+          color = 'hsla(338, 100%, 55%';
+        } else {
+          color = 'hsla(186, 100%, 42%';
+        } 
 
         textures[i] = document.createElement('canvas')
         textures[i].width = textures[i].height = radius * 50
