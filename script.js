@@ -141,6 +141,16 @@ function render() {
     ctxCells.fillStyle = 'black'
     ctxPressure.fill()
     health.textContent = 'DEAD.'
+    /*
+    const avgs = localStorage.getItem('levvvels-avg-arr') || []
+    
+    if (avgs.length) {
+      const total = avgs.reduce((a, b) => a + b, 0)
+      const newAvg = total / avgs.length
+    }
+
+    localStorage.setItem(`levvvels-avg-arr}`, ttlVal)
+    */
   } else {
     ttl.textContent = ttlVal
     requestAnimationFrame(render)
