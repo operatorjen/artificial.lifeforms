@@ -49,10 +49,10 @@ let alive = true
 function draw(ctx, fill) {
   ctx.beginPath()
   ctx.fillStyle = fill
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 50, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, cellsVal * 20, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
   ctx.fill()
 }
 
@@ -179,6 +179,7 @@ function render() {
     const total = avgs.reduce((a, b) => a + b, 0)
     localStorage.setItem('levvvels-avg-curr', total / avgs.length)
     localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+    avgInfo.textContent = (total / avgs.length).toFixed(5)
     
   } else {
     ttl.textContent = ttlVal

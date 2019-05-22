@@ -1,13 +1,15 @@
 /* CSS files add styling rules to your content */
 
 body {
-  font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+  font-family: monospace;
   margin: 0;
   background-color: #111;
 }
 
 div {
-  padding: 5px;
+  padding: 2px 5px;
+  border: 1px solid rgba(5, 5, 5, 0.8);
+  margin: 1px;
 }
 
 section {
@@ -63,4 +65,23 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+button {
+  border: 0px;
+  padding: 2px 5px;
+  background-color: rgba(10, 200, 230, 0.9);
+  border-top: 2px solid #fff;
+  border-left: 2px solid #111;
+}
+
+button:hover {
+  background-color: rgba(180, 180, 10, 0.8);
+  border-top: 2px solid #f00;
+  border-left: 2px solid #fff;
+}
+
+button[disabled] {
+  opacity: 0.5;
+  background-color: transparent;
 }
