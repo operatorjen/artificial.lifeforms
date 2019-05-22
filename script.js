@@ -48,9 +48,9 @@ const BACTERIA_HIGH = 0.6
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.5
 
-const GRAVITY_X = 0.01
-const GRAVITY_Y = 0.01
-const GROUPS = [100, 100, 50]
+const GRAVITY_X = 0.0
+const GRAVITY_Y = 0.0
+const GROUPS = [100, 100, 150]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -61,9 +61,10 @@ const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
 let alive = true
+let complete = false
 
-let height = window.innerHeight
-let width = window.innerWidth
+let height = window.innerHeight / 2
+let width = window.innerWidth / 2
 
 const fluid = function () {  
   let numX, numY, particles, 
@@ -173,10 +174,9 @@ const fluid = function () {
       healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
     }
 
-    ttlVal++
-
     if (healthVal >= 1 && alive) {
       ttl.textContent = ttlVal
+      ttlVal++
     }
 
     for (let i = 0, l = numX * numY; i < l; i++) {
@@ -209,10 +209,7 @@ const fluid = function () {
 
     ctxPressure.putImageData(imageData, 0, 0)
     
-    if (healthVal < 1 || !alive) {
-      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
-      ctxPressure.fillStyle = 'black'
-      ctxPressure.fill()
+    if (!alive && !complete) {
       health.textContent = 'no'
       ttl.textContent = ttlVal
       btn.disabled = ''
@@ -225,7 +222,7 @@ const fluid = function () {
       localStorage.setItem('levvvels-avg-curr', total / avgs.length)
       localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
       avgInfo.textContent = (total / avgs.length).toFixed(5)
-      
+      complete = true
     }
     
     requestAnimationFrame(run)
@@ -377,8 +374,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight
-      canvas.width = width = window.innerWidth
+      canvas.height = height = window.innerHeight / 2
+      canvas.width = width = window.innerWidth / 2
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -387,19 +384,26 @@ const fluid = function () {
 
       for (let i = 0; i < GROUPS.length; i++) {
         let color = 'hsla(360, 80%, 80%';
+        let color2 = 'hsla(57, 75%, 64%';
 
-        if (virusVal >= VIRUS_HIGH) {
-          color = 'hsla(147, 62%, 50%';
-        } else if (bacteriaVal >= BACTERIA_HIGH) {
+        if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 3) {
           color = 'hsla(157, 75%, 64%';
-        } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
+        } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 2) {
           color = 'hsla(55, 100%, 64%';
-        } else if (pressureVal > PRESSURE_MIN && pressureVal < PRESSURE_MAX) {
+        } else {
           color = 'hsla(331, 100%, 64%';
+        }
+        
+        if (virusVal >= VIRUS_HIGH) {
+          color2 = 'hsla(157, 75%, 64%';
+        }
+        
+        if (bacteriaVal >= BACTERIA_HIGH) {
+          color2 = 'hsla(84, 86%, 42%';
         }
 
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 10
+        textures[i].width = textures[i].height = radius * 50
 
         const nctx = textures[i].getContext('2d')
 
@@ -407,7 +411,7 @@ const fluid = function () {
           radius, radius, 1,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 0.8)')
-        grad.addColorStop(1, color + ', 0)')
+        grad.addColorStop(1, color2 + ', 0)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
