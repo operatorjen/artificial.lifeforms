@@ -9,18 +9,7 @@ const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
 ctxPressure.height = canvasPressure.height = 300
-const canvasCells = document.querySelector('#cells-cv')
-const ctxCells = canvasCells.getContext('2d')
-ctxCells.width = canvasCells.width = 500
-ctxCells.height = canvasCells.height = 300
-const canvasBacteria = document.querySelector('#bacteria-cv')
-const ctxBacteria = canvasBacteria.getContext('2d')
-ctxBacteria.width = canvasBacteria.width = 500
-ctxBacteria.height = canvasBacteria.height = 300
-const canvasVirus = document.querySelector('#virus-cv')
-const ctxVirus = canvasVirus.getContext('2d')
-ctxVirus.width = canvasVirus.width = 1000
-ctxVirus.height = canvasVirus.height = 500
+
 let btn = document.querySelector('button')
 const rebirths = document.querySelector('#rebirths span')
 
@@ -289,7 +278,7 @@ const fluid = function () {
 
               if (distance < spacing) {
                 const m = 1 - (distance / spacing)
-                forceA += Math.pow(m, 2)
+                forceA += Math.pow(m, 3)
                 forceB += Math.pow(m, 3) / 2
                 particle.m = m
                 particle.dfx = (dfx / distance) * m
@@ -305,14 +294,14 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * pressureVal
+    forceA = (forceA - 2) * 0.7
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
       let press = forceA + forceB * neighbor.m
 
       if (this.type !== neighbor.type) {
-        press *= (cellsVal / pressureVal) * 0.57
+        press *= 0.6
       }
 
       const dx = neighbor.dfx * press
@@ -358,7 +347,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * cellsVal * 100
+    const size = radius * cellsVal * 300
 
     metaCtx.drawImage(
       textures[this.type],
@@ -387,14 +376,15 @@ const fluid = function () {
         let color2 = 'hsla(57, 75%, 64%';
 
         if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 3) {
-          color = 'hsla(157, 75%, 64%';
+          color = 'hsla(186, 100%, 42%';
         } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX / 2) {
-          color = 'hsla(55, 100%, 64%';
+          color = 'hsla(186, 100%, 42%';
         } else {
           color = 'hsla(331, 100%, 64%';
         }
         
         if (virusVal >= VIRUS_HIGH) {
+          color = 'hsla(157, 100%, 44%';
           color2 = 'hsla(157, 75%, 64%';
         }
         
