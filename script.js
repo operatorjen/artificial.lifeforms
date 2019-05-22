@@ -22,6 +22,7 @@ const ctxVirus = canvasVirus.getContext('2d')
 ctxVirus.width = canvasVirus.width = 1000
 ctxVirus.height = canvasVirus.height = 500
 let btn = document.querySelector('button')
+const rebirths = document.querySelector('#rebirths span')
 
 let pressureVal = 0.6
 let cellsVal = 0.9
@@ -35,6 +36,8 @@ cells.value = cellsVal
 bacteria.value = bacteriaVal
 virus.value = virusVal
 
+rebirths.textContent = JSON.parse(localStorage.getItem('levvvels-avg-arr')).length || 0
+
 const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
 const CELL_MIN = 0.2
@@ -47,13 +50,13 @@ const VIRUS_HIGH = 0.5
 let alive = true
 
 function draw(ctx, fill) {
-  //ctx.beginPath()
-  ctx.strokeStyle = fill
+  ctx.beginPath()
+  ctx.fillStyle = fill
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 220, 0, 2 * Math.PI)
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
-  ctx.stroke()
+  ctx.fill()
 }
 
 function render() {
@@ -164,18 +167,12 @@ function render() {
     ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
     ctxPressure.fillStyle = 'black'
     ctxPressure.fill()
-    ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
-    ctxCells.fillStyle = 'white'
-    ctxCells.fill()
     health.textContent = 'no'
     ttl.textContent = ttlVal
     btn.disabled = ''
 
     let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
     avgs.push(ttlVal)
-    if (avgs.length > 50) {
-      avgs = avgs.slice(1, avgs.length)
-    }
     const total = avgs.reduce((a, b) => a + b, 0)
     localStorage.setItem('levvvels-avg-curr', total / avgs.length)
     localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
@@ -199,8 +196,7 @@ function render() {
   }
 }
 
-render()
-
 btn.onclick = function () {
-  document.location.reload()
+  render()
+  btn.disabled = 'disabled'
 }
