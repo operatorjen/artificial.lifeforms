@@ -141,13 +141,17 @@ function render() {
     ctxCells.fillStyle = 'black'
     ctxPressure.fill()
     health.textContent = 'DEAD.'
+    ttl.textContent = ttlVal
 
-    const avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
-    
+    let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
     avgs.push(ttlVal)
+    if (avgs.length > 50) {
+      avgss
+    }
     const total = avgs.reduce((a, b) => a + b, 0)
     localStorage.setItem('levvvels-avg-curr', total / avgs.length)
     localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+    
   } else {
     ttl.textContent = ttlVal
     requestAnimationFrame(render)
