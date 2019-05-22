@@ -59,7 +59,8 @@ let pressureSpeed = 0.05
 let pressureViscosity = 1.5
 const MAX_INTERACTOR_INPUT = 0.99
 const MAX_INTERACTOR_OUTPUT = 1.05
-let canvas
+let canvas = canvasPressure
+let alive = true
 
 let height = window.innerHeight
 let width = window.innerWidth
@@ -182,22 +183,7 @@ const fluid = function () {
 
     ttlVal++
 
-    if (healthVal < 1 || !alive) {
-      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
-      ctxPressure.fillStyle = 'black'
-      ctxPressure.fill()
-      health.textContent = 'no'
-      ttl.textContent = ttlVal
-      btn.disabled = ''
-
-      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
-      avgs.push(ttlVal)
-      const total = avgs.reduce((a, b) => a + b, 0)
-      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
-      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
-      avgInfo.textContent = (total / avgs.length).toFixed(5)
-
-    } else {
+    if (healthVal >= 1 && alive) {
       ttl.textContent = ttlVal
       /*
       if (ttlVal % Math.round(pressureVal * 100) === 0) {
@@ -239,7 +225,7 @@ const fluid = function () {
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 3) {
+    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
       (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
     }
 
@@ -385,22 +371,16 @@ const fluid = function () {
       metaCtx = metaCanvas.getContext('2d')
 
       for (let i = 0; i < GROUPS.length; i++) {
-        let color
+        let color = 'hsla(360, 80%, 80%';
 
         if (virusVal >= VIRUS_HIGH) {
           color = 'hsla(147, 62%, 50%';
-        }
-        
-        if (bacteriaVal >= BACTERIA_HIGH) {
+        } else if (bacteriaVal >= BACTERIA_HIGH) {
           color = 'hsla(157, 75%, 64%';
-        }
-        
-        if (cellsVal < CELL_MIN || cellsVal >= CELL_MAX) {
+        } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
           color = 'hsla(355, 100%, 64%';
-        }
-        
-        if (pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) {
-          color = 'hsla(11, 100%, 64%';
+        } else if (pressureVal > PRESSURE_MIN && pressureVal < PRESSURE_MAX) {
+          color = 'hsla(331, 100%, 64%';
         }
 
         textures[i] = document.createElement('canvas')
@@ -411,7 +391,6 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 1,
           radius, radius, radius)
-
         grad.addColorStop(0, color + ', 0.8)')
         grad.addColorStop(1, color + ', 0)')
         nctx.fillStyle = grad
@@ -448,18 +427,6 @@ const fluid = function () {
 }()
 
 fluid.init()
-
-let alive = true
-
-function draw(ctx, fill) {
-  ctx.beginPath()
-  ctx.fillStyle = fill
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 220, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
-  ctx.fill()
-}
 
 btn.onclick = function () {
   document.location.reload()
