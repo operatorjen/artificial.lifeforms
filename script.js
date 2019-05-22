@@ -1,7 +1,7 @@
-const pressure = document.querySelector('#pressure input')
-const cells = document.querySelector('#cells input')
-const bacteria = document.querySelector('#bacteria input')
-const virus = document.querySelector('#virus input')
+let pressure = document.querySelector('#pressure input')
+let cells = document.querySelector('#cells input')
+let bacteria = document.querySelector('#bacteria input')
+let virus = document.querySelector('#virus input')
 const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
 const avgInfo = document.querySelector('#avg span')
@@ -203,6 +203,11 @@ btn.onclick = function () {
   virusVal = 0.0001
   healthVal = 100
   ttlVal = 0
+  pressure.value = pressureVal
+  cells.value = cellsVal
+  bacteria.value = bacteriaVal
+  virus.value = virusVal
+  alert('got here', pressure.value)
   render()
-  btn.disabled = 'disabled'
+  //btn.disabled = 'disabled'
 }
