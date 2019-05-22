@@ -197,6 +197,12 @@ function render() {
 }
 
 btn.onclick = function () {
+  pressureVal = 0.6
+  cellsVal = 0.9
+  bacteriaVal = 0.0001
+  virusVal = 0.0001
+  healthVal = 100
+  ttlVal = 0
   render()
   btn.disabled = 'disabled'
 }
