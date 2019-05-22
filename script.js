@@ -23,9 +23,9 @@ ctxVirus.height = canvasVirus.height = 500
 
 let pressureVal = 0.6
 let cellsVal = 0.9
-let bacteriaVal = 0.01
-let virusVal = 0.02
-let healthVal = 1
+let bacteriaVal = 0.1
+let virusVal = 0.2
+let healthVal = 100
 let ttlVal = 0
 
 const PRESSURE_MIN = 0.3
@@ -47,6 +47,7 @@ function draw(ctx, fill) {
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
   ctx.fill()
+  ctx.closePath()
 }
 
 function render() {
@@ -104,15 +105,15 @@ function render() {
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
-      healthVal = healthVal - (pressureVal * 1500 * cellsVal)
+      healthVal = healthVal - (pressureVal / 1500 / cellsVal)
     }
     
     if (pressureVal >= PRESSURE_MAX) {
-      healthVal = healthVal - (pressureVal * 10000 * cellsVal)
+      healthVal = healthVal - (pressureVal / 10000 / cellsVal)
     }
     
     if (virusVal >= VIRUS_HIGH) {
-      healthVal = healthVal - (pressureVal * 10000 * virusVal)
+      healthVal = healthVal - (pressureVal / 10000 / virusVal)
     }
     
     if (pressureVal < 0.0001) {
@@ -123,14 +124,18 @@ function render() {
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
-    healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal * virusVal))
+    healthVal = healthVal + ((pressureVal * cellsVal * 1.5) / (bacteriaVal / virusVal))
   }
   
   health.textContent = healthVal
   ttlVal++
   
   if (healthVal < 1 || !alive) {
+    ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
     ctxPressure.fillStyle = 'black'
+    ctxPressure.fill()
+    ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
+    ctxCells.fillStyle = 'black'
     ctxPressure.fill()
     health.textContent = 'DEAD.'
   } else {
