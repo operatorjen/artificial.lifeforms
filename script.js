@@ -47,13 +47,13 @@ const VIRUS_HIGH = 0.5
 let alive = true
 
 function draw(ctx, fill) {
-  ctx.beginPath()
-  ctx.fillStyle = fill
-  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, cellsVal * 20, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
-  ctx.arc(Math.random() * ctx.width / 2, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
-  ctx.fill()
+  //ctx.beginPath()
+  ctx.strokeStyle = fill
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, pressureVal * 70, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, cellsVal * 220, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
+  ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
+  ctx.stroke()
 }
 
 function render() {
@@ -174,7 +174,7 @@ function render() {
     let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
     avgs.push(ttlVal)
     if (avgs.length > 50) {
-      avgs = avgs.slice(0)
+      avgs = avgs.slice(1, avgs.length)
     }
     const total = avgs.reduce((a, b) => a + b, 0)
     localStorage.setItem('levvvels-avg-curr', total / avgs.length)
