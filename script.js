@@ -61,8 +61,11 @@ const MAX_INTERACTOR_INPUT = 0.99
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas
 
+let height = window.innerHeight
+let width = window.innerWidth
+
 const fluid = function () {  
-  let width, height, numX, numY, particles, 
+  let numX, numY, particles, 
       grid, textures, numParticles
 
   const threshold = 110
@@ -257,7 +260,6 @@ const fluid = function () {
 
   Particle.prototype.first_process = function () {
     const g = grid[Math.round(this.y / spacing) * numX + Math.round(this.x / spacing)]
-
     if (g) {
       g.close[g.length++] = this
     }
@@ -385,8 +387,21 @@ const fluid = function () {
       for (let i = 0; i < GROUPS.length; i++) {
         let color
 
-        if (virusVal >= VIRUS_)
-        color = 'hsla(210, 90%, 70%';
+        if (virusVal >= VIRUS_HIGH) {
+          color = 'hsla(147, 62%, 50%';
+        }
+        
+        if (bacteriaVal >= BACTERIA_HIGH) {
+          color = 'hsla(157, 75%, 64%';
+        }
+        
+        if (cellsVal < CELL_MIN || cellsVal >= CELL_MAX) {
+          color = 'hsla(355, 100%, 64%';
+        }
+        
+        if (pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) {
+          color = 'hsla(11, 100%, 64%';
+        }
 
         textures[i] = document.createElement('canvas')
         textures[i].width = textures[i].height = radius * 10
