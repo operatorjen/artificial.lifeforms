@@ -20,6 +20,7 @@ const canvasVirus = document.querySelector('#virus-cv')
 const ctxVirus = canvasVirus.getContext('2d')
 ctxVirus.width = canvasVirus.width = 1000
 ctxVirus.height = canvasVirus.height = 500
+let btn = document.querySelector('button')
 
 let pressureVal = 0.6
 let cellsVal = 0.9
@@ -100,10 +101,10 @@ function render() {
     virusVal = 0.000001
   }
   
-  pressure.value = pressureVal
-  cells.value = cellsVal
-  bacteria.value = bacteriaVal
-  virus.value = virusVal
+  pressure.value = pressureVal.toFixed(7)
+  cells.value = cellsVal.toFixed(7)
+  bacteria.value = bacteriaVal.toFixed(7)
+  virus.value = virusVal.toFixed(7)
   
   draw(ctxPressure, `rgba(230, 40, 210, ${pressureVal * 0.01})`)
   draw(ctxCells, `rgba(220, 110, 10, ${cellsVal * 0.01})`)
@@ -150,7 +151,7 @@ function render() {
     healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
   }
   
-  health.textContent = healthVal
+  health.textContent = healthVal.toFixed(2)
   ttlVal++
   
   if (healthVal < 1 || !alive) {
@@ -158,10 +159,11 @@ function render() {
     ctxPressure.fillStyle = 'black'
     ctxPressure.fill()
     ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
-    ctxCells.fillStyle = 'black'
-    ctxPressure.fill()
+    ctxCells.fillStyle = 'white'
+    ctxCells.fill()
     health.textContent = 'DEAD.'
     ttl.textContent = ttlVal
+    btn.disabled = ''
 
     let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
     avgs.push(ttlVal)
@@ -190,4 +192,11 @@ function render() {
   }
 }
 
-render()
+btn.onclick = function () {
+  pressureVal = pressure.value
+  cellsVal = cells.value
+  bacteriaVal = bacteria.value
+  virusVal = virus.value
+  btn.disabled = 'disabled'
+  render()
+}
