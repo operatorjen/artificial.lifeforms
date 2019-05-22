@@ -137,7 +137,6 @@ function render() {
     
     if (pressureVal < 0.0001) {
       pressure.classList.add('critical')
-      cells.classList.add('critical')
       healthVal = 0
       alive = false
     }
