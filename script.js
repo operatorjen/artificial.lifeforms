@@ -4,6 +4,7 @@ const bacteria = document.querySelector('#bacteria input')
 const virus = document.querySelector('#virus input')
 const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
+const avgInfo = document.querySelector('#avg span')
 const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
@@ -84,11 +85,13 @@ function render() {
   }
   
   if (pressureVal < 0.0 || isNaN(pressureVal)) {
+    pressure.classList.add('critical')
     pressureVal = 0.0
     alive = false
   }
   
   if (cellsVal < 0.000001 || isNaN(cellsVal)) {
+    cells.classList.add('critical')
     cellsVal = 0.0
     alive = false
   }
@@ -138,10 +141,14 @@ function render() {
   
   if (virusVal < VIRUS_HIGH) {
     virus.classList.remove('critical')
+  } else {
+    virus.classList.add('critical')
   }
   
   if (bacteriaVal < BACTERIA_HIGH) {
     bacteria.classList.remove('critical')
+  } else {
+    bacteria.classList.add('critical')
   }
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
@@ -150,8 +157,7 @@ function render() {
     cells.classList.remove('critical')
     healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
   }
-  
-  health.textContent = healthVal.toFixed(2)
+
   ttlVal++
   
   if (healthVal < 1 || !alive) {
@@ -161,7 +167,7 @@ function render() {
     ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
     ctxCells.fillStyle = 'white'
     ctxCells.fill()
-    health.textContent = 'DEAD.'
+    health.textContent = 'no'
     ttl.textContent = ttlVal
     btn.disabled = ''
 
@@ -192,11 +198,8 @@ function render() {
   }
 }
 
+render()
+
 btn.onclick = function () {
-  pressureVal = pressure.value
-  cellsVal = cells.value
-  bacteriaVal = bacteria.value
-  virusVal = virus.value
-  btn.disabled = 'disabled'
-  render()
+  document.location.reload()
 }

@@ -28,6 +28,7 @@ input {
   border: 0;
   background-color: transparent;
   color: rgba(20, 200, 100, 0.8);
+  width: 100px;
 }
 
 span {
@@ -35,6 +36,7 @@ span {
   margin: 1px;
   display: inline-block;
   color: #fff;
+  width: 100px;
 }
 
 .critical {
