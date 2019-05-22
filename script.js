@@ -375,18 +375,17 @@ const fluid = function () {
         let color = 'hsla(331, 100%, 64%';
         let color2 = 'hsla(57, 75%, 64%';
         
-        if (virusVal >= VIRUS_HIGH || cellsVal < CELL_MIN) {
-          color = 'hsla(157, 100%, 44%';
+        if (virusVal >= VIRUS_HIGH) {
           color2 = 'hsla(157, 75%, 64%';
-        } else if (bacteriaVal >= BACTERIA_HIGH || cellsVal < CELL_MIN) {
+        } else if (bacteriaVal >= BACTERIA_HIGH) {
           color2 = 'hsla(84, 86%, 42%';
         }
         
         if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
           color = 'hsla(338, 100%, 55%';
         } else {
-          color = 'hsla(186, 100%, 42%';
-        } 
+          color = 'hsla(157, 100%, 44%';
+        }
 
         textures[i] = document.createElement('canvas')
         textures[i].width = textures[i].height = radius * 50
