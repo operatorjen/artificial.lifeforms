@@ -23,8 +23,8 @@ ctxVirus.height = canvasVirus.height = 500
 
 let pressureVal = 0.6
 let cellsVal = 0.9
-let bacteriaVal = 0.001
-let virusVal = 0.001
+let bacteriaVal = 0.0001
+let virusVal = 0.0001
 let healthVal = 100
 let ttlVal = 0
 
@@ -33,7 +33,7 @@ const PRESSURE_MAX = 0.99
 const CELL_MIN = 0.2
 const CELL_MAX = 0.999
 const BACTERIA_LOW = 0.02
-const BACTERIA_HIGH = 0.3
+const BACTERIA_HIGH = 0.6
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.5
 
@@ -61,10 +61,10 @@ function render() {
     cellsVal -= bacteriaVal * cellsVal 
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
     bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-    cellsVal -= bacteriaVal * cellsVal + cellsVal / 5
+    cellsVal -= bacteriaVal * cellsVal
     
     if (virusVal >= VIRUS_HIGH) {
-      cellsVal -= virusVal / cellsVal
+      cellsVal -= virusVal * cellsVal
     }
   }
   
@@ -128,7 +128,7 @@ function render() {
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
-    healthVal = healthVal + ((pressureVal * cellsVal * 1.5) / (bacteriaVal / virusVal))
+    healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
   }
   
   health.textContent = healthVal
