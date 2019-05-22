@@ -48,16 +48,16 @@ const BACTERIA_HIGH = 0.6
 const VIRUS_LOW = 0.002
 const VIRUS_HIGH = 0.5
 
-const GRAVITY_X = 0
-const GRAVITY_Y = 0
-const GROUPS = [100, 100]
+const GRAVITY_X = 0.01
+const GRAVITY_Y = 0.01
+const GROUPS = [100, 100, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
 let pressureSpeed = 0.05
-let pressureViscosity = 1.5
-const MAX_INTERACTOR_INPUT = 0.99
+let pressureViscosity = 2.5
+const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
 let alive = true
@@ -130,14 +130,6 @@ const fluid = function () {
     bacteria.value = bacteriaVal.toFixed(7)
     virus.value = virusVal.toFixed(7)
 
-    /*
-    draw(ctxPressure, `rgba(230, 40, 210, ${pressureVal * 0.01})`)
-    draw(ctxCells, `rgba(220, 110, 10, ${cellsVal * 0.01})`)
-    draw(ctxBacteria, `rgba(20, 200, 120, ${bacteriaVal * 0.01})`)
-    draw(ctxVirus, `rgba(20, 200, 230, ${virusVal * 0.005})`)
-    */
-
-
     if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
         (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
       if (cellsVal < CELL_MIN) {
@@ -185,20 +177,6 @@ const fluid = function () {
 
     if (healthVal >= 1 && alive) {
       ttl.textContent = ttlVal
-      /*
-      if (ttlVal % Math.round(pressureVal * 100) === 0) {
-        ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
-      }
-
-      if (ttlVal % Math.round(pressureVal * 1200) === 0) {
-        ctxCells.clearRect(0, 0, ctxCells.width, ctxCells.height)
-      }
-
-      if (ttlVal % Math.round(pressureVal * 1700) === 0) {
-        ctxBacteria.clearRect(0, 0, ctxBacteria.width, ctxBacteria.height)
-        ctxVirus.clearRect(0, 0, ctxVirus.width, ctxVirus.height)
-      }
-      */
     }
 
     for (let i = 0, l = numX * numY; i < l; i++) {
@@ -230,7 +208,26 @@ const fluid = function () {
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
+    
+    if (healthVal < 1 || !alive) {
+      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
+      ctxPressure.fillStyle = 'black'
+      ctxPressure.fill()
+      health.textContent = 'no'
+      ttl.textContent = ttlVal
+      btn.disabled = ''
+      cellsVal = 0.0
+      pressureVal = 0.0
 
+      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
+      avgs.push(ttlVal)
+      const total = avgs.reduce((a, b) => a + b, 0)
+      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
+      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+      avgInfo.textContent = (total / avgs.length).toFixed(5)
+      
+    }
+    
     requestAnimationFrame(run)
   };
 
@@ -318,7 +315,7 @@ const fluid = function () {
       let press = forceA + forceB * neighbor.m
 
       if (this.type !== neighbor.type) {
-        press *= (cellsVal / pressureVal) * 0.27
+        press *= (cellsVal / pressureVal) * 0.57
       }
 
       const dx = neighbor.dfx * press
@@ -343,10 +340,28 @@ const fluid = function () {
     }
 
     this.draw()
+    /*
+    if (healthVal < 1 || !alive) {
+      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
+      ctxPressure.fillStyle = 'black'
+      ctxPressure.fill()
+      health.textContent = 'no'
+      ttl.textContent = ttlVal
+      btn.disabled = ''
+
+      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
+      avgs.push(ttlVal)
+      const total = avgs.reduce((a, b) => a + b, 0)
+      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
+      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+      avgInfo.textContent = (total / avgs.length).toFixed(5)
+
+    }
+    */
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 10
+    const size = radius * cellsVal * 100
 
     metaCtx.drawImage(
       textures[this.type],
@@ -378,7 +393,7 @@ const fluid = function () {
         } else if (bacteriaVal >= BACTERIA_HIGH) {
           color = 'hsla(157, 75%, 64%';
         } else if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
-          color = 'hsla(355, 100%, 64%';
+          color = 'hsla(55, 100%, 64%';
         } else if (pressureVal > PRESSURE_MIN && pressureVal < PRESSURE_MAX) {
           color = 'hsla(331, 100%, 64%';
         }
