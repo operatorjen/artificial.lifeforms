@@ -10,9 +10,9 @@ div {
   padding: 5px;
 }
 
-div, span, time {
-  line-height: 1.2rem;
-  font-size: 1.2rem;
+div, span, time, label {
+  line-height: 0.9rem;
+  font-size: 0.75rem;
 }
 
 span {
@@ -23,17 +23,16 @@ span {
 }
 
 label {
-  width: 95px;
+  width: 55px;
   display: inline-block;
   color: rgba(255, 255, 255, 0.4);
 }
 
-time {
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid #f0f;
+#time, #health {
+  color: #fff;
   padding: 5px;
   margin: 1px;
-  display: inline-block;
+  display: block;
 }
 
 canvas {

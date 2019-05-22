@@ -2,8 +2,8 @@ const pressure = document.querySelector('#pressure span')
 const cells = document.querySelector('#cells span')
 const bacteria = document.querySelector('#bacteria span')
 const virus = document.querySelector('#virus span')
-const health = document.querySelector('#health')
-const ttl = document.querySelector('time')
+const health = document.querySelector('#health span')
+const ttl = document.querySelector('#time span')
 const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
@@ -23,8 +23,8 @@ ctxVirus.height = canvasVirus.height = 500
 
 let pressureVal = 0.6
 let cellsVal = 0.9
-let bacteriaVal = 0.1
-let virusVal = 0.2
+let bacteriaVal = 0.001
+let virusVal = 0.001
 let healthVal = 100
 let ttlVal = 0
 
@@ -62,6 +62,10 @@ function render() {
   } else if (bacteriaRandom >= BACTERIA_HIGH)  {
     bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
     cellsVal -= bacteriaVal * cellsVal + cellsVal / 5
+    
+    if (virusVal >= VIRUS_HIGH) {
+      cellsVal -= virusVal / cellsVal
+    }
   }
   
   const virusRandom = Math.random()
