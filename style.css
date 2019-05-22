@@ -17,9 +17,15 @@ section {
   z-index: 2;
 }
 
-div, span, time, label {
+div, span, time, label, input {
   line-height: 0.9rem;
   font-size: 0.75rem;
+}
+
+input {
+  border: 0;
+  background-color: transparent;
+  color: rgba(20, 200, 100, 0.8);
 }
 
 span {

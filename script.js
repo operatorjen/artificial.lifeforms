@@ -1,7 +1,7 @@
-const pressure = document.querySelector('#pressure span')
-const cells = document.querySelector('#cells span')
-const bacteria = document.querySelector('#bacteria span')
-const virus = document.querySelector('#virus span')
+const pressure = document.querySelector('#pressure input')
+const cells = document.querySelector('#cells input')
+const bacteria = document.querySelector('#bacteria input')
+const virus = document.querySelector('#virus input')
 const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
 const canvasPressure = document.querySelector('#pressure-cv')
@@ -27,6 +27,11 @@ let bacteriaVal = 0.0001
 let virusVal = 0.0001
 let healthVal = 100
 let ttlVal = 0
+
+pressure.value = pressureVal
+cells.value = cellsVal
+bacteria.value = bacteriaVal
+virus.value = virusVal
 
 const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
@@ -95,10 +100,10 @@ function render() {
     virusVal = 0.000001
   }
   
-  pressure.textContent = pressureVal
-  cells.textContent = cellsVal
-  bacteria.textContent = bacteriaVal
-  virus.textContent = virusVal
+  pressure.value = pressureVal
+  cells.value = cellsVal
+  bacteria.value = bacteriaVal
+  virus.value = virusVal
   
   draw(ctxPressure, `rgba(230, 40, 210, ${pressureVal * 0.01})`)
   draw(ctxCells, `rgba(220, 110, 10, ${cellsVal * 0.01})`)
@@ -108,26 +113,40 @@ function render() {
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
-      cells.className('critical')
+      cells.classList.add('critical')
       healthVal = healthVal - (pressureVal / 1500 / cellsVal)
     }
     
     if (pressureVal >= PRESSURE_MAX) {
+      pressure.classList.add('critical')
       healthVal = healthVal - (pressureVal / 10000 / cellsVal)
     }
     
     if (virusVal >= VIRUS_HIGH) {
+      virus.classList.add('critical')
       healthVal = healthVal - (pressureVal / 10000 / virusVal)
     }
     
     if (pressureVal < 0.0001) {
+      pressure.classList.add('critical')
+      cells.classList.add('critical')
       healthVal = 0
       alive = false
     }
-  } 
+  }
+  
+  if (virusVal < VIRUS_HIGH) {
+    virus.classList.remove('critical')
+  }
+  
+  if (bacteriaVal < BACTERIA_HIGH) {
+    bacteria.classList.remove('critical')
+  }
   
   if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
       (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
+    pressure.classList.remove('critical')
+    cells.classList.remove('critical')
     healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
   }
   
@@ -169,7 +188,6 @@ function render() {
       ctxVirus.clearRect(0, 0, ctxVirus.width, ctxVirus.height)
     }
   }
-
 }
 
 render()
