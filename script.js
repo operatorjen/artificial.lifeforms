@@ -108,6 +108,7 @@ function render() {
   if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
       (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
     if (cellsVal < CELL_MIN) {
+      cells.className('critical')
       healthVal = healthVal - (pressureVal / 1500 / cellsVal)
     }
     
@@ -146,7 +147,7 @@ function render() {
     let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
     avgs.push(ttlVal)
     if (avgs.length > 50) {
-      avgss
+      avgs = avgs.slice(0)
     }
     const total = avgs.reduce((a, b) => a + b, 0)
     localStorage.setItem('levvvels-avg-curr', total / avgs.length)

@@ -29,6 +29,11 @@ span {
   color: #fff;
 }
 
+.critical {
+  color: #f00;
+  font-weight: bold;
+}
+
 label {
   width: 55px;
   display: inline-block;
