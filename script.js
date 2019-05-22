@@ -36,7 +36,8 @@ cells.value = cellsVal
 bacteria.value = bacteriaVal
 virus.value = virusVal
 
-rebirths.textContent = JSON.parse(localStorage.getItem('levvvels-avg-arr')).length || 0
+rebirths.textContent = localStorage.getItem('levvvels-avg-arr') && 
+  JSON.parse(localStorage.getItem('levvvels-avg-arr')).length || 0
 
 const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
@@ -196,18 +197,8 @@ function render() {
   }
 }
 
+render()
+
 btn.onclick = function () {
-  pressureVal = 0.6
-  cellsVal = 0.9
-  bacteriaVal = 0.0001
-  virusVal = 0.0001
-  healthVal = 100
-  ttlVal = 0
-  pressure.value = pressureVal
-  cells.value = cellsVal
-  bacteria.value = bacteriaVal
-  virus.value = virusVal
-  alert('got here', pressure.value)
-  render()
-  //btn.disabled = 'disabled'
+  document.location.reload()
 }
