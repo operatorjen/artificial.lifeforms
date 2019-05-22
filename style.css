@@ -10,6 +10,13 @@ div {
   padding: 5px;
 }
 
+section {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
 div, span, time, label {
   line-height: 0.9rem;
   font-size: 0.75rem;

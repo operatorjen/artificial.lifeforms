@@ -47,7 +47,6 @@ function draw(ctx, fill) {
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, bacteriaVal * 10, 0, 2 * Math.PI)
   ctx.arc(Math.random() * ctx.width, Math.random() * ctx.height, virusVal * 10, 0, 2 * Math.PI)
   ctx.fill()
-  ctx.closePath()
 }
 
 function render() {
