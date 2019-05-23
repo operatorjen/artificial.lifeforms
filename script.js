@@ -35,13 +35,13 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [150, 150, 150]
+const GROUPS = [100, 100, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
 let pressureSpeed = 0.01
-let pressureViscosity = 0.5
+let pressureViscosity = 10.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
@@ -72,7 +72,7 @@ let experiences = []
 
 function setStatus () {
   const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
-  const status = OPPORTUNITIES[Math.floor(Math.random() * SKILLS[skill].length)]
+  const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
   experiences.push(status)
 }
 
@@ -80,8 +80,8 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, textures, numParticles
 
-  let threshold = 98
-  const spacing = 100
+  let threshold = 50
+  const spacing = 10
   const radius = 80
   const limit = radius
 
@@ -382,8 +382,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight 
-      canvas.width = width = window.innerWidth 
+      canvas.height = height = window.innerHeight / 3.2
+      canvas.width = width = window.innerWidth / 1.5
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -394,20 +394,9 @@ const fluid = function () {
         let color = 'hsla(331, 100%, 64%';
         let color2 = 'hsla(57, 75%, 64%';
 
-        if (virusVal >= VIRUS_HIGH / 2 || !alive) {
-          color2 = 'hsla(157, 75%, 64%';
-        } else if (bacteriaVal >= BACTERIA_HIGH / 3 || !alive) {
-          color = 'hsla(157, 75%, 64%';
-          color2 = 'hsla(84, 86%, 42%';
-        } else if (alive) {
-          color = 'hsla(338, 100%, 55%';
-        } else {
-          color = 'hsla(157, 75%, 64%';
-          color2 = 'hsla(157, 75%, 64%';
-        }
 
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 10
+        textures[i].width = textures[i].height = radius * 5
 
         const nctx = textures[i].getContext('2d')
 
@@ -415,7 +404,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(1, color2 + ', 0)')
+        grad.addColorStop(1, color2 + ', 0.05)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
