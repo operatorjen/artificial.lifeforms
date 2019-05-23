@@ -190,9 +190,6 @@ const fluid = function () {
     }
 
     if (healthVal >= 1 && alive) {
-      ttl.textContent = ttlVal
-      ttlVal++
-      
       if (ttlVal % 10 === 0) {
         setStatus()
       }
@@ -247,13 +244,15 @@ const fluid = function () {
       localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
       final.querySelector('.ttl span').textContent = ttlVal
       final.querySelector('.lifespan span').textContent = (total / avgs.length).toFixed(2)
-      final.querySelector('.rebirths span').textContent = total
+      final.querySelector('.rebirths span').textContent = avgs.length
       final.querySelector('#experiences').textContent = experiences.join(' => ')
       final.classList.remove('hidden')
       complete = true
       metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   
     } else {
+      ttl.textContent = ttlVal
+      ttlVal++
       requestAnimationFrame(run)
     }
   };

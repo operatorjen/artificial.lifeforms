@@ -21,8 +21,10 @@ const OPPORTUNITIES = {
 let experiences = localStorage.getItem('levvvels-experiences') && JSON.parse(localStorage.getItem('levvvels-experiences')) || []
 
 const setStatus = function () {
-  const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
-  const status = OPPORTUNITIES[Math.floor(Math.random() * SKILLS[this.skill].length)]
+  const skill = Math.floor(Math.random() * Object.keys(SKILLS).length + 1)
+  console.log('skill', skill)
+  const status = OPPORTUNITIES[SKILLS[Math.floor(Math.random() * SKILLS[this.skill].length) + 1]]
+  console.log('status', status)
   experiences.push(status)
   localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
 }
