@@ -39,12 +39,12 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 100, 150]
+const GROUPS = [100, 100, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
-let pressureSpeed = 0.05
+let pressureSpeed = 0.01
 let pressureViscosity = 2.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
@@ -60,7 +60,7 @@ const fluid = function () {
       grid, textures, numParticles
 
   const threshold = 100
-  const spacing = 5
+  const spacing = 1
   const radius = 10
   const limit = radius 
 
@@ -266,8 +266,8 @@ const fluid = function () {
     let cellY = Math.round(this.y / spacing)
     let close = []
 
-    for (let xOff = -1; xOff < 3; xOff++) {
-      for (let yOff = -1; yOff < 3; yOff++) {
+    for (let xOff = -1; xOff < 2; xOff++) {
+      for (let yOff = -1; yOff < 2; yOff++) {
         const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
 
         if (cell && cell.length) {
@@ -281,8 +281,8 @@ const fluid = function () {
 
               if (distance < spacing) {
                 const m = 1 - (distance / spacing)
-                forceA += Math.pow(m, 3)
-                forceB += Math.pow(m, 3) / 2
+                forceA += Math.pow(m, 2)
+                forceB += Math.pow(m, 2) / 2
                 particle.m = m
                 particle.dfx = (dfx / distance) * m
                 particle.dfy = (dfy / distance) * m
@@ -360,9 +360,9 @@ const fluid = function () {
         let color = 'hsla(331, 100%, 64%';
         let color2 = 'hsla(57, 75%, 64%';
         
-        if (virusVal >= VIRUS_HIGH) {
+        if (virusVal >= VIRUS_HIGH / 2) {
           color2 = 'hsla(157, 75%, 64%';
-        } else if (bacteriaVal >= BACTERIA_HIGH) {
+        } else if (bacteriaVal >= BACTERIA_HIGH / 2) {
           color2 = 'hsla(84, 86%, 42%';
         } else if (cellsVal > CELL_MIN) {
           color = 'hsla(338, 100%, 55%';
@@ -376,7 +376,7 @@ const fluid = function () {
         const nctx = textures[i].getContext('2d')
 
         const grad = nctx.createRadialGradient(
-          radius, radius, 1,
+          radius, radius, 0.5,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 0.8)')
         grad.addColorStop(1, color2 + ', 0)')
@@ -387,8 +387,8 @@ const fluid = function () {
         nctx.fill()
       }
 
-      numX = Math.round(width / spacing) + 5
-      numY = Math.round(height / spacing) + 1
+      numX = Math.round(width / spacing)
+      numY = Math.round(height / spacing)
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
@@ -402,8 +402,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * 3),
-              radius + Math.random() * (height - radius * 3)))
+              radius + Math.random() * 40,
+              radius + Math.random() * cellsVal * 100))
         }
       }
 
