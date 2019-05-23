@@ -52,16 +52,13 @@ let canvas = canvasPressure
 let alive = true
 let complete = false
 
-let height = window.innerHeight
-let width = window.innerWidth
-
 const fluid = function () {
   let width, height, numX, numY, particles,
       grid, textures, numParticles
 
-  const threshold = 30
-  const spacing = 20
-  const radius = 200
+  let threshold = 98
+  const spacing = 100
+  const radius = 80
   const limit = radius
 
   const run = function () {
@@ -123,6 +120,8 @@ const fluid = function () {
       if (cellsVal < CELL_MIN) {
         cells.classList.add('critical')
         healthVal = healthVal - (pressureVal / 100 / cellsVal)
+      } else {
+        cells.classList.remove('critical')
       }
 
       if (pressureVal >= PRESSURE_MAX) {
@@ -196,6 +195,8 @@ const fluid = function () {
     while (i--) {
       particles[i].first_process()
     }
+    
+    threshold = pressureVal * 130
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
@@ -365,16 +366,18 @@ const fluid = function () {
 
         if (virusVal >= VIRUS_HIGH / 2 || !alive) {
           color2 = 'hsla(157, 75%, 64%';
-        } else if (bacteriaVal >= BACTERIA_HIGH / 2 || !alive) {
+        } else if (bacteriaVal >= BACTERIA_HIGH / 3 || !alive) {
+          color = 'hsla(157, 75%, 64%';
           color2 = 'hsla(84, 86%, 42%';
-        } else if (cellsVal > CELL_MIN && alive) {
+        } else if (alive) {
           color = 'hsla(338, 100%, 55%';
         } else {
+          color = 'hsla(157, 75%, 64%';
           color2 = 'hsla(157, 75%, 64%';
         }
 
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 50
+        textures[i].width = textures[i].height = radius * 10
 
         const nctx = textures[i].getContext('2d')
 
@@ -390,7 +393,7 @@ const fluid = function () {
         nctx.fill()
       }
 
-      numX = Math.round(width / spacing) + 1
+      numX = Math.round(width / spacing) + 5
       numY = Math.round(height / spacing) + 1
 
       for (let i = 0; i < numX * numY; i++) {
@@ -405,8 +408,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * 5),
-              radius + Math.random() * (height - radius * 5)))
+              radius + Math.random() * (width - radius * 2),
+              radius + Math.random() * (height - radius * 2)))
         }
       }
 
