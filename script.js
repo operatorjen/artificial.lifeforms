@@ -25,7 +25,7 @@ cells.value = cellsVal
 bacteria.value = bacteriaVal
 virus.value = virusVal
 
-rebirths.textContent = localStorage.getItem('levvvels-avg-arr') && 
+rebirths.textContent = localStorage.getItem('levvvels-avg-arr') &&
   JSON.parse(localStorage.getItem('levvvels-avg-arr')).length || 0
 
 const PRESSURE_MIN = 0.3
@@ -39,7 +39,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 50, 50]
+const GROUPS = [150, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -55,13 +55,13 @@ let complete = false
 let height = window.innerHeight / 2
 let width = window.innerWidth / 2
 
-const fluid = function () {  
-  let numX, numY, particles, 
+const fluid = function () {
+  let numX, numY, particles,
       grid, textures, numParticles
 
-  const threshold = 50
-  const spacing = 10
-  const radius = 50
+  const threshold = 10
+  const spacing = 20
+  const radius = 100
   const limit = radius
 
   const run = function () {
@@ -70,10 +70,10 @@ const fluid = function () {
     cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
 
     const bacteriaRandom = Math.random()
-    
+
     if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
-      cellsVal -= bacteriaVal * cellsVal 
+      cellsVal -= bacteriaVal * cellsVal
     } else if (bacteriaRandom >= BACTERIA_HIGH)  {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
       cellsVal -= bacteriaVal * cellsVal
@@ -160,7 +160,7 @@ const fluid = function () {
       cells.classList.remove('critical')
       healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
     }
-    
+
     if (cellsVal < CELL_MIN) {
       cells.classList.add('critical')
       healthVal = 0.0
@@ -170,9 +170,9 @@ const fluid = function () {
       ttl.textContent = ttlVal
       ttlVal++
     }
-    
+
     // particle animation start
-    
+
     metaCtx.clearRect(0, 0, width, height)
 
     for (let i = 0, l = numX * numY; i < l; i++) {
@@ -204,28 +204,25 @@ const fluid = function () {
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
-    
-    if (!alive) {
+
+    if (!alive && !complete) {
       cellsVal = 0.0
       pressureVal = 0.0
-      
-      if (!complete) {
-        health.textContent = 'no'
-        ttl.textContent = ttlVal
-        btn.disabled = ''
-        
-        let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
-        avgs.push(ttlVal)
-        const total = avgs.reduce((a, b) => a + b, 0)
-        localStorage.setItem('levvvels-avg-curr', total / avgs.length)
-        localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
-        avgInfo.textContent = (total / avgs.length).toFixed(5)
-        complete = true
-      }
-      
-      run()
+      health.textContent = 'no'
+      ttl.textContent = ttlVal
+      btn.disabled = ''
+
+      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
+      avgs.push(ttlVal)
+      const total = avgs.reduce((a, b) => a + b, 0)
+      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
+      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+      avgInfo.textContent = (total / avgs.length).toFixed(5)
+      complete = true
+      metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+  
     } else {
-      requestAnimationFrame(run) 
+      requestAnimationFrame(run)
     }
   };
 
@@ -310,7 +307,7 @@ const fluid = function () {
       let press = forceA + forceB * neighbor.m
 
       if (this.type !== neighbor.type) {
-        press *= 0.6
+        press *= 0.99 * pressureVal
       }
 
       const dx = neighbor.dfx * press
@@ -365,15 +362,14 @@ const fluid = function () {
       for (let i = 0; i < GROUPS.length; i++) {
         let color = 'hsla(331, 100%, 64%';
         let color2 = 'hsla(57, 75%, 64%';
-        
-        if (virusVal >= VIRUS_HIGH / 2) {
+
+        if (virusVal >= VIRUS_HIGH / 2 || !alive) {
           color2 = 'hsla(157, 75%, 64%';
-        } else if (bacteriaVal >= BACTERIA_HIGH / 2) {
+        } else if (bacteriaVal >= BACTERIA_HIGH / 2 || !alive) {
           color2 = 'hsla(84, 86%, 42%';
-        } else if (cellsVal > CELL_MIN) {
+        } else if (cellsVal > CELL_MIN && alive) {
           color = 'hsla(338, 100%, 55%';
-        } else if (cellsVal < CELL_MAX) {
-          color = 'hsla(157, 100%, 44%';
+        } else {
           color2 = 'hsla(157, 75%, 64%';
         }
 
@@ -383,9 +379,9 @@ const fluid = function () {
         const nctx = textures[i].getContext('2d')
 
         const grad = nctx.createRadialGradient(
-          radius, radius, 0.5,
+          radius, radius, 0.2,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 0.4)')
+        grad.addColorStop(0, color + ', 1)')
         grad.addColorStop(1, color2 + ', 0)')
         nctx.fillStyle = grad
         nctx.beginPath()
@@ -417,7 +413,7 @@ const fluid = function () {
       numParticles = particles.length
       run()
     }
-  } 
+  }
 }()
 
 fluid.init()
