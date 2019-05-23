@@ -62,11 +62,9 @@ const fluid = function () {
   const threshold = 100
   const spacing = 1
   const radius = 10
-  const limit = radius 
+  const limit = 1
 
   const run = function () {
-    metaCtx.clearRect(0, 0, width, height)
-    
     pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
     let cellsRandom = Math.random() * cellsVal
     cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
@@ -167,6 +165,8 @@ const fluid = function () {
       ttl.textContent = ttlVal
       ttlVal++
     }
+    
+    // particle animation start
 
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
@@ -193,7 +193,7 @@ const fluid = function () {
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
     for (let i = 0, n = imageData.data.length; i < n; i += 2) {
-      (imageData.data[i + 4] < threshold) && (imageData.data[i + 2] /= 2)
+      (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
@@ -282,7 +282,7 @@ const fluid = function () {
               if (distance < spacing) {
                 const m = 1 - (distance / spacing)
                 forceA += Math.pow(m, 2)
-                forceB += Math.pow(m, 2) / 2
+                forceB += Math.pow(m, 3) / 2
                 particle.m = m
                 particle.dfx = (dfx / distance) * m
                 particle.dfy = (dfy / distance) * m
@@ -297,7 +297,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.6
+    forceA = (forceA - 2) * 0.25
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -378,7 +378,7 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.5,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 0.8)')
+        grad.addColorStop(0, color + ', 1)')
         grad.addColorStop(1, color2 + ', 0)')
         nctx.fillStyle = grad
         nctx.beginPath()
@@ -387,8 +387,8 @@ const fluid = function () {
         nctx.fill()
       }
 
-      numX = Math.round(width / spacing)
-      numY = Math.round(height / spacing)
+      numX = Math.round(width / spacing) + 5
+      numY = Math.round(height / spacing) + 1
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
@@ -402,8 +402,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * 40,
-              radius + Math.random() * cellsVal * 100))
+              radius + Math.random() * (width - radius * 2),
+              radius + Math.random() * (height - radius * 2)))
         }
       }
 
@@ -417,4 +417,9 @@ fluid.init()
 
 btn.onclick = function () {
   document.location.reload()
+}
+
+window.onresize = function () {
+  metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+  ctxPressure = canvas.getContext('2d')
 }
