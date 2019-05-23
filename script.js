@@ -84,8 +84,8 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 10
-  const spacing = 2
+  let threshold = 150
+  const spacing = 20
   const radius = 110
   const limit = radius
   
@@ -270,7 +270,7 @@ const fluid = function () {
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
     for (let i = 0, n = imageData.data.length; i < n; i += 2) {
-      (imageData.data[i + 1] < threshold) && (imageData.data[i + 1] /= 2)
+      (imageData.data[i + 2] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
