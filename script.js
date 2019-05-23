@@ -47,9 +47,9 @@ let alive = true
 let complete = false
 
 const SKILLS = {
-  0: [1, 5, 8], // speaking
-  1: [0, 2, 6, 7, 9], // moving
-  2: [1, 4, 5], // thinking
+  0: [1, 5, 8, 12], // speaking
+  1: [0, 2, 6, 7, 9, 10], // moving
+  2: [1, 4, 5, 11], // thinking
   3: [3, 4] // resting
 }
 
@@ -63,7 +63,10 @@ const OPPORTUNITIES = {
   6: 'hiking',
   7: 'stretching',
   8: 'interpreting',
-  9: 'climbing'
+  9: 'climbing',
+  10: 'fighting',
+  11: 'reading',
+  12: 'screaming'
 }
 
 let experiences = []
