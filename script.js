@@ -86,13 +86,13 @@ const fluid = function () {
 
   let threshold = 110
   const spacing = 80
-  const radius = 170
+  const radius = 70
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(cellsVal * 205) + 50}, 83%, 45%`;
-      let color2 = `hsla(${Math.round(virusVal * bacteriaVal * 110) - 10}, 30%, 85%`;
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 135)}, 53%, 45%`;
+      let color2 = `hsla(${Math.round(cellsVal * 200) + 50}, 80%, 55%`;
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
@@ -257,8 +257,8 @@ const fluid = function () {
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 4) {
-      (imageData.data[i + 3] < threshold) && (imageData.data[i + 1] /= 2)
+    for (let i = 0, n = imageData.data.length; i < n; i += 3) {
+      (imageData.data[i + 2] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
@@ -400,7 +400,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 10
+    const size = radius * 13
 
     metaCtx.drawImage(
       textures[this.type],
