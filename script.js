@@ -85,11 +85,12 @@ function setStatus () {
   const sideEffect = Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)
   const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
   const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
-  experiences.push(`${status} ${SIDE_EFFECTS[sideEffect]}`)
-  console.log(sideEffect)
-  if (sideEffect < 3) {
-    console.log('got bad stuff ', sideEffect)
-    cellsVal -= 0.005
+  experiences.push(`<p>${status} <em>${SIDE_EFFECTS[sideEffect]}</em></p>`)
+
+  if (sideEffect < 2) {
+    cellsVal -= 0.000002
+  } else if (sideEffect > 4) {
+    cellsVal += 0.000001
   }
 }
 
@@ -307,7 +308,7 @@ const fluid = function () {
       final.querySelector('.ttl span').textContent = ttlVal
       final.querySelector('.lifespan span').textContent = (total / avgs.length).toFixed(2)
       final.querySelector('.rebirths span').textContent = avgs.length
-      final.querySelector('#experiences').textContent = experiences.join(' => ')
+      final.querySelector('#experiences').innerHTML = experiences.join('')
       final.classList.remove('hidden')
       complete = true
      // metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)

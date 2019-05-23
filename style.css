@@ -111,6 +111,14 @@ ul {
   width: auto;
 }
 
+#experiences p {
+  padding: 2px 3px;
+  margin: 2px;
+  display: inline-block;
+  background-color: rgba(55, 55, 55, 0.5);
+  border-radius: 3px;
+}
+
 li {
   margin: 2px 5px;
 }
