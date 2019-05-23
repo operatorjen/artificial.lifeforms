@@ -7,7 +7,8 @@ const ttl = document.querySelector('#time span')
 let canvasPressure = document.querySelector('#pressure-cv')
 let ctxPressure = canvasPressure.getContext('2d')
 let final = document.querySelector('#final')
-let btn = document.querySelector('button')
+let btn = document.querySelector('#rebirths')
+let btnReset = document.querySelector('#reset')
 const rebirths = document.querySelector('#rebirths span')
 
 let pressureVal = 0.6
@@ -70,13 +71,14 @@ const OPPORTUNITIES = {
 }
 
 const SIDE_EFFECTS = {
-  0: 'injury',
-  1: 'illness',
-  2: 'therapy',
-  3: 'amnesia',
-  4: 'mood',
-  5: 'relaxing',
-  6: 'neutral'
+  0: 'injured',
+  1: 'ill',
+  2: 'tired',
+  3: 'moody',
+  4: 'therapeutic',
+  5: 'relaxed',
+  6: 'neutral',
+  7: 'energetic'
 }
 
 let experiences = []
@@ -87,9 +89,9 @@ function setStatus () {
   const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
   experiences.push(`<p>${status} <em>${SIDE_EFFECTS[sideEffect]}</em></p>`)
 
-  if (sideEffect < 2) {
+  if (sideEffect < 3) {
     cellsVal -= 0.000002
-  } else if (sideEffect > 4) {
+  } else if (sideEffect > 3) {
     cellsVal += 0.000001
   }
 }
@@ -119,8 +121,8 @@ const fluid = function () {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
       } else if (ttlVal > 2000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 15)}, 33%, 65%`;
-        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 53%, 35%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 65%`;
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
       }
 
       if (!started || !textures[i]) {
@@ -484,6 +486,11 @@ fluid.init()
 
 btn.onclick = function () {
   document.location.reload()
+}
+
+btnReset.onclick = function () {
+  localStorage.clear()
+  btn.click()
 }
 
 window.onresize = function () {

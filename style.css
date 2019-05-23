@@ -119,10 +119,18 @@ ul {
   border-radius: 3px;
 }
 
+#experiences p em {
+  color: rgb(20, 200, 210);
+}
+
 li {
   margin: 2px 5px;
 }
 
 h2 {
   font-size: 1.3rem;
+}
+
+button#reset {
+  background-color: #aaa;
 }
