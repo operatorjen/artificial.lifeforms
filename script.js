@@ -33,13 +33,13 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 50]
+const GROUPS = [100, 50, 150]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
 let pressureSpeed = 0.1
-let pressureViscosity = 1.5
+let pressureViscosity = 5.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
@@ -84,20 +84,19 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 100
-  const spacing = 50
+  let threshold = 10
+  const spacing = 10
   const radius = 120
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(cellsVal / pressureVal * 25) - 10}, 83%, 45%`;
-      let color2 = `hsla(${Math.round(virusVal / bacteriaVal * 50) - 20}, 60%, 35%`;
+      let color = `hsla(${Math.round(cellsVal * pressureVal * 25)}, 83%, 45%`;
+      let color2 = `hsla(${Math.round(virusVal * bacteriaVal * 10)}, 30%, 85%`;
 
-      console.log(color, color2)
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * cellsVal * 15
+        textures[i].width = textures[i].height = radius * 12
         started = true
       }
       
@@ -108,7 +107,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.99, color2 + ', 0.005)')
+        grad.addColorStop(0.9, color2 + ', 0.005)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -230,10 +229,7 @@ const fluid = function () {
 
     // particle animation start
 
-    if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
-      metaCtx.clearRect(0, 0, width, height)
-    }
-    
+    metaCtx.clearRect(0, 0, width, height)
  
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0

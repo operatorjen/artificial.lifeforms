@@ -62,10 +62,10 @@ label {
 
 canvas {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 10vh;
+  left: 25vw;
+  width: 50vw;
+  height: 80vh;
 }
 
 button {
