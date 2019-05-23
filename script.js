@@ -82,7 +82,7 @@ const fluid = function () {
 
   let threshold = 20
   const spacing = 10
-  const radius = 40
+  const radius = 10
   const limit = radius
 
   const run = function () {
@@ -197,8 +197,10 @@ const fluid = function () {
 
     // particle animation start
 
-   // metaCtx.clearRect(0, 0, width, height)
-
+    if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
+     // metaCtx.clearRect(0, 0, width, height)
+    }
+      
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
     }
@@ -221,12 +223,12 @@ const fluid = function () {
       particles[i].first_process()
     }
     
-    threshold = pressureVal * 130 * virusVal * bacteriaVal * 10
+    threshold = pressureVal * 10 * virusVal * bacteriaVal * 10
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 4) {
-      (imageData.data[i + 5] < threshold) && (imageData.data[i + 1] /= 2)
+    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+      (imageData.data[i + 1] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
@@ -276,8 +278,8 @@ const fluid = function () {
     this.vx = this.x - this.px
     this.vy = this.y - this.py
 
-    const distX = this.x - Math.random() * window.innerWidth / 2
-    const distY = this.y - Math.random() * window.innerHeight / 2
+    const distX = this.x - Math.random() * width
+    const distY = this.y - Math.random() * height
     const dist = Math.sqrt(distX * distX + distY * distY)
 
     if (dist < radius) {
@@ -366,7 +368,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 10
+    const size = radius * 10 * cellsVal * pressureVal
 
     metaCtx.drawImage(
       textures[this.type],
@@ -382,8 +384,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight / 3.2
-      canvas.width = width = window.innerWidth / 2.5
+      canvas.height = height = 300 //window.innerHeight / 3.2
+      canvas.width = width = 300 //window.innerWidth / 2.5
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -411,8 +413,8 @@ const fluid = function () {
         nctx.fill()
       }
 
-      numX = Math.round(width / spacing) + 5
-      numY = Math.round(height / spacing) + 1
+      numX = Math.round(width / spacing) + 10
+      numY = Math.round(height / spacing) + 10
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
