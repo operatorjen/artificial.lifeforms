@@ -33,7 +33,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 50, 150]
+const GROUPS = [50, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -84,20 +84,24 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 110
+  let threshold = 160
   const spacing = 2
-  const radius = 70
+  const radius = 110
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 135) + 40}, 33%, 45%`;
-      let color2 = `hsla(${Math.round(cellsVal * 20) + 340}, 80%, 55%`;
+      let color2 = `hsla(${Math.round(cellsVal * 10) + 140}, 80%, 75%`;
       
-      if (ttlVal > 500) {
-        color2 = `hsla(${Math.round(cellsVal * 55) + 60}, 33%, 45%`;
-      } else if (ttlVal > 1000) {
-        color2 = `hsla(${Math.round(cellsVal * 105) + 10}, 63%, 45%`;
+      if (ttlVal > 500 && ttlVal <= 1000) {
+        color2 = `hsla(${Math.round(cellsVal * 45) + 260}, 73%, 45%`;
+      } else if (ttlVal > 1000 && ttlVal <= 1500) {
+        color2 = `hsla(${Math.round(cellsVal * 105) + 110}, 83%, 45%`;
+      } else if (ttlVal > 1500) {
+        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
+      } else if (ttlVal > 2000) {
+        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
       }
 
       if (!started || !textures[i]) {
@@ -110,10 +114,10 @@ const fluid = function () {
         const nctx = textures[i].getContext('2d')
         nctx.clearRect(0, 0, width, height)
         const grad = nctx.createRadialGradient(
-          radius, radius, 0.2,
+          radius, radius, 0.8,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.9, color2 + ', 0.003)')
+        grad.addColorStop(0.9, color2 + ', 0.03)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -259,12 +263,12 @@ const fluid = function () {
       particles[i].first_process()
     }
     
-    threshold = pressureVal * 10 * virusVal * bacteriaVal * 10
+    //threshold = pressureVal * 100 * virusVal / bacteriaVal * 10
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 3) {
-      (imageData.data[i + 2] < threshold) && (imageData.data[i + 1] /= 2)
+    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+      (imageData.data[i + 1] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
