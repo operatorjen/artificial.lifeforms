@@ -39,7 +39,7 @@ let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
 let pressureSpeed = 0.1
-let pressureViscosity = 5.5
+let pressureViscosity = 1.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
@@ -84,19 +84,19 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 10
-  const spacing = 10
-  const radius = 120
+  let threshold = 110
+  const spacing = 80
+  const radius = 170
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(cellsVal * pressureVal * 25)}, 83%, 45%`;
-      let color2 = `hsla(${Math.round(virusVal * bacteriaVal * 10)}, 30%, 85%`;
+      let color = `hsla(${Math.round(cellsVal * 205) + 50}, 83%, 45%`;
+      let color2 = `hsla(${Math.round(virusVal * bacteriaVal * 110) - 10}, 30%, 85%`;
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 12
+        textures[i].width = textures[i].height = radius * 15
         started = true
       }
       
@@ -106,7 +106,7 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.2,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 1)')
+        grad.addColorStop(0, color + ', 0.6)')
         grad.addColorStop(0.9, color2 + ', 0.005)')
         nctx.fillStyle = grad
         nctx.beginPath()
@@ -257,7 +257,7 @@ const fluid = function () {
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+    for (let i = 0, n = imageData.data.length; i < n; i += 4) {
       (imageData.data[i + 3] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
@@ -440,7 +440,7 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * cellsVal * 5),
+              radius + Math.random() * (width - radius * cellsVal * 3),
               radius + Math.random() * (height - radius * cellsVal * 3)))
         }
       }

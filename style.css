@@ -63,8 +63,8 @@ label {
 canvas {
   position: absolute;
   top: 10vh;
-  left: 25vw;
-  width: 50vw;
+  left: 0;
+  width: 100vw;
   height: 80vh;
 }
 
