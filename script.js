@@ -84,7 +84,7 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 160
+  let threshold = 10
   const spacing = 2
   const radius = 110
   const limit = radius
@@ -92,16 +92,18 @@ const fluid = function () {
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 135) + 40}, 33%, 45%`;
-      let color2 = `hsla(${Math.round(cellsVal * 10) + 140}, 80%, 75%`;
+      let color2 = `hsla(${Math.round(cellsVal * 310) + 11}, 43%, 20%`;
       
       if (ttlVal > 500 && ttlVal <= 1000) {
-        color2 = `hsla(${Math.round(cellsVal * 45) + 260}, 73%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
-        color2 = `hsla(${Math.round(cellsVal * 105) + 110}, 83%, 45%`;
-      } else if (ttlVal > 1500) {
+        color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 83%, 45%`;
+      } else if (ttlVal > 1500 && ttlVal <= 2000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
       } else if (ttlVal > 2000) {
-        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 15)}, 33%, 65%`;
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 53%, 35%`;
       }
 
       if (!started || !textures[i]) {
