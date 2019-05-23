@@ -86,14 +86,15 @@ const fluid = function () {
   const radius = 30
   const limit = radius
   
-  const setHealth = function () {
+  const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = 'hsla(351, 100%, 64%';
-      let color2 = `hsla(${cellsVal * 320}, 75%, 64%`;
+      let color = `hsla(${Math.round(cellsVal * 20)}, ${cellsVal * 75}%, 64%`;
+      let color2 = `hsla(${Math.round(bacteriaVal / virusVal * 200)}, ${Math.round(virusVal / cellsVal * 200)}%, 64%`;
 
+      console.log(color, color2)
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 9
+        textures[i].width = textures[i].height = radius * cellsVal * 10
         started = true
       }
       
@@ -104,7 +105,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.9, color2 + ', 0.05)')
+        grad.addColorStop(0.5, color2 + ', 0.5)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -227,7 +228,7 @@ const fluid = function () {
     // particle animation start
 
     //if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
-      metaCtx.clearRect(0, 0, width, height)
+    //  metaCtx.clearRect(0, 0, width, height)
     //}
     
     ctxPressure.fillStyle = `hsla(${cellsVal * 280}, 75%, 64%, 1)`;
@@ -264,6 +265,8 @@ const fluid = function () {
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
+    
+    setHealth(cellsVal, bacteriaVal, virusVal)
 
     if (!alive && !complete) {
       health.textContent = 'no'
@@ -422,8 +425,8 @@ const fluid = function () {
       metaCanvas.width = width
       metaCanvas.height = height
       metaCtx = metaCanvas.getContext('2d')
-
-      setHealth()
+      console.log(cellsVal, bacteriaVal, virusVal)
+      setHealth(cellsVal, bacteriaVal, virusVal)
 
       numX = Math.round(width / spacing) + 1
       numY = Math.round(height / spacing) + 1
