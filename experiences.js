@@ -1,11 +1,11 @@
-const skills = {
-  speaking: [1, 5, 8],
-  moving: [0, 2, 6, 7, 9],
-  thinking: [1, 4, 5],
-  resting: [3, 4]
+const SKILLS = {
+  0: [1, 5, 8], // speaking
+  1: [0, 2, 6, 7, 9], // moving
+  2: [1, 4, 5], // thinking
+  3: [3, 4] // resting
 }
 
-const opportunities = {
+const OPPORTUNITIES = {
   0: 'running',
   1: 'teaching',
   2: 'swimming',
@@ -18,13 +18,11 @@ const opportunities = {
   9: 'climbing'
 }
 
-const updateStatus = function () {
+let experiences = localStorage.getItem('levvvels-experiences') && JSON.parse(localStorage.getItem('levvvels-experiences')) || []
 
-  if (!this.status) {
-    // start journey
-    this.status = Math.floor(Math.random() * 10)
-    console.log(this.status)
-  } else {
-    
-  }
+const setStatus = function () {
+  const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
+  const status = OPPORTUNITIES[Math.floor(Math.random() * SKILLS[this.skill].length)]
+  experiences.push(status)
+  localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
 }

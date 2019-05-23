@@ -168,6 +168,10 @@ const fluid = function () {
     if (healthVal >= 1 && alive) {
       ttl.textContent = ttlVal
       ttlVal++
+      
+      if (ttlVal % 500 === 0) {
+        setStatus()
+      }
     }
 
     // particle animation start
