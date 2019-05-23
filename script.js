@@ -7,7 +7,7 @@ const ttl = document.querySelector('#time span')
 let canvasPressure = document.querySelector('#pressure-cv')
 let ctxPressure = canvasPressure.getContext('2d')
 let final = document.querySelector('#final')
-let btn = document.querySelector('#rebirths')
+let btn = document.querySelector('#rebirth')
 let btnReset = document.querySelector('#reset')
 const rebirths = document.querySelector('#rebirths span')
 
