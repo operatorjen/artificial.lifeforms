@@ -74,14 +74,45 @@ function setStatus () {
   experiences.push(status)
 }
 
+let textures = {}
+let started = false
+
 const fluid = function () {
   let width, height, numX, numY, particles,
-      grid, textures, numParticles
+      grid, numParticles
 
   let threshold = 120
   const spacing = 10
   const radius = 30
   const limit = radius
+  
+  const setHealth = function () {
+    for (let i = 0; i < GROUPS.length; i++) {
+      let color = 'hsla(351, 100%, 64%';
+      let color2 = `hsla(${cellsVal * 320}, 75%, 64%`;
+
+      if (!started || !textures[i]) {
+        textures[i] = document.createElement('canvas')
+        textures[i].width = textures[i].height = radius * 9
+        started = true
+      }
+      
+      if (textures[i]) {
+        const nctx = textures[i].getContext('2d')
+
+        const grad = nctx.createRadialGradient(
+          radius, radius, 0.2,
+          radius, radius, radius)
+        grad.addColorStop(0, color + ', 1)')
+        grad.addColorStop(0.9, color2 + ', 0.05)')
+        nctx.fillStyle = grad
+        nctx.beginPath()
+        nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
+        nctx.closePath()
+        nctx.fill()
+      }
+    }
+  }
 
   const run = function () {
     pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
@@ -377,31 +408,6 @@ const fluid = function () {
       this.y - radius,
       size, size)
   }
-  
-  Particle.prototype.setHealth = function () {
-    let textures = []
-    
-    for (let i = 0; i < GROUPS.length; i++) {
-      let color = 'hsla(351, 100%, 64%';
-      let color2 = `hsla(${cellsVal * 320}, 75%, 64%`;
-
-      textures[i] = document.createElement('canvas')
-      textures[i].width = textures[i].height = radius * 9
-
-      const nctx = textures[i].getContext('2d')
-
-      const grad = nctx.createRadialGradient(
-        radius, radius, 0.2,
-        radius, radius, radius)
-      grad.addColorStop(0, color + ', 1)')
-      grad.addColorStop(0.9, color2 + ', 0.05)')
-      nctx.fillStyle = grad
-      nctx.beginPath()
-      nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
-      nctx.closePath()
-      nctx.fill()
-    }
-  }
 
   return {
     init: function () {
@@ -417,7 +423,7 @@ const fluid = function () {
       metaCanvas.height = height
       metaCtx = metaCanvas.getContext('2d')
 
-      this.setHealth()
+      setHealth()
 
       numX = Math.round(width / spacing) + 1
       numY = Math.round(height / spacing) + 1
