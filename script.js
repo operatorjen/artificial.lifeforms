@@ -52,16 +52,16 @@ let canvas = canvasPressure
 let alive = true
 let complete = false
 
-let height = window.innerHeight / 2
-let width = window.innerWidth / 2
+let height = window.innerHeight
+let width = window.innerWidth
 
 const fluid = function () {
   let numX, numY, particles,
       grid, textures, numParticles
 
-  const threshold = 10
-  const spacing = 20
-  const radius = 100
+  const threshold = 30
+  const spacing = 10
+  const radius = 200
   const limit = radius
 
   const run = function () {
@@ -245,8 +245,8 @@ const fluid = function () {
     this.vx = this.x - this.px
     this.vy = this.y - this.py
 
-    const distX = this.x - Math.random() * window.innerWidth
-    const distY = this.y - Math.random() * window.innerHeight
+    const distX = this.x - Math.random() * window.innerWidth / 2
+    const distY = this.y - Math.random() * window.innerHeight / 2
     const dist = Math.sqrt(distX * distX + distY * distY)
 
     if (dist < radius) {
@@ -272,7 +272,7 @@ const fluid = function () {
     let cellY = Math.round(this.y / spacing)
     let close = []
 
-    for (let xOff = -1; xOff < 2; xOff++) {
+    for (let xOff = -1; xOff < 3; xOff++) {
       for (let yOff = -1; yOff < 2; yOff++) {
         const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
 
@@ -300,14 +300,14 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.25
+    forceA = (forceA - 2) * 0.65
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
       let press = forceA + forceB * neighbor.m
 
       if (this.type !== neighbor.type) {
-        press *= 0.99 * pressureVal
+        press *= 0.6 * pressureVal
       }
 
       const dx = neighbor.dfx * press
@@ -335,12 +335,12 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 50
+    const size = radius * 10
 
     metaCtx.drawImage(
       textures[this.type],
-      this.x - radius,
-      this.y - radius,
+      this.x - radius + canvas.width / 3,
+      this.y - radius + canvas.height / 3,
       size, size)
   }
 
@@ -351,8 +351,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight / 2
-      canvas.width = width = window.innerWidth / 2
+      canvas.height = height = window.innerHeight 
+      canvas.width = width = window.innerWidth 
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -390,7 +390,7 @@ const fluid = function () {
         nctx.fill()
       }
 
-      numX = Math.round(width / spacing) + 5
+      numX = Math.round(width / spacing) + 1
       numY = Math.round(height / spacing) + 1
 
       for (let i = 0; i < numX * numY; i++) {
@@ -405,8 +405,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * 2),
-              radius + Math.random() * (height - radius * 2)))
+              radius + Math.random() * (width - radius * 5),
+              radius + Math.random() * (height - radius * 5)))
         }
       }
 
