@@ -38,8 +38,8 @@ let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
-let pressureSpeed = 0.01
-let pressureViscosity = 10.5
+let pressureSpeed = 0.1
+let pressureViscosity = 1.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
@@ -82,19 +82,19 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 120
-  const spacing = 10
-  const radius = 30
+  const spacing = 30
+  const radius = 60
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(cellsVal * 20)}, ${cellsVal * 75}%, 64%`;
-      let color2 = `hsla(${Math.round(bacteriaVal / virusVal * 200)}, ${Math.round(virusVal / cellsVal * 200)}%, 64%`;
+      let color = `hsla(360, 93%, 55%`;
+      let color2 = `hsla(14, 73%, 35%`;
 
       console.log(color, color2)
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * cellsVal * 10
+        textures[i].width = textures[i].height = radius * cellsVal * 15
         started = true
       }
       
@@ -104,8 +104,8 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.2,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.5, color2 + ', 0.5)')
+        grad.addColorStop(0, color + ', 0.8)')
+        grad.addColorStop(0.9, color2 + ', 0.01)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -231,9 +231,7 @@ const fluid = function () {
     //  metaCtx.clearRect(0, 0, width, height)
     //}
     
-    ctxPressure.fillStyle = `hsla(${cellsVal * 280}, 75%, 64%, 1)`;
-    ctxPressure.fill()
-      
+ 
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
     }
@@ -261,7 +259,7 @@ const fluid = function () {
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
     for (let i = 0, n = imageData.data.length; i < n; i += 2) {
-      (imageData.data[i + 1] < threshold) && (imageData.data[i + 1] /= 2)
+      (imageData.data[i + 3] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
@@ -285,7 +283,7 @@ const fluid = function () {
       final.querySelector('#experiences').textContent = experiences.join(' => ')
       final.classList.remove('hidden')
       complete = true
-      metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+     // metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   
     } else {
       ttl.textContent = ttlVal
@@ -403,7 +401,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 10 * cellsVal * pressureVal
+    const size = radius * 30 * cellsVal * pressureVal
 
     metaCtx.drawImage(
       textures[this.type],
@@ -418,8 +416,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = 300 //window.innerHeight / 3.2
-      canvas.width = width = 300 //window.innerWidth / 2.5
+      canvas.height = height = window.innerHeight
+      canvas.width = width = window.innerWidth
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
