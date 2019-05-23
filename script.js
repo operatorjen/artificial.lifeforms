@@ -91,8 +91,8 @@ const fluid = function () {
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(virusVal / bacteriaVal * 135)}, 53%, 45%`;
-      let color2 = `hsla(${Math.round(cellsVal * 200) + 50}, 80%, 55%`;
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 135) + 40}, 33%, 45%`;
+      let color2 = `hsla(${Math.round(cellsVal * 20) + 340}, 80%, 55%`;
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
@@ -106,8 +106,8 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.2,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 0.6)')
-        grad.addColorStop(0.9, color2 + ', 0.005)')
+        grad.addColorStop(0, color + ', 1)')
+        grad.addColorStop(0.9, color2 + ', 0.05)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
