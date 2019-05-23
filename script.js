@@ -65,7 +65,7 @@ const fluid = function () {
   const limit = radius 
 
   const run = function () {
-    //metaCtx.clearRect(0, 0, width, height)
+    metaCtx.clearRect(0, 0, width, height)
     
     pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
     let cellsRandom = Math.random() * cellsVal
@@ -124,17 +124,17 @@ const fluid = function () {
         (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
       if (cellsVal < CELL_MIN) {
         cells.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 1500 / cellsVal)
+        healthVal = healthVal - (pressureVal / 100 / cellsVal)
       }
 
       if (pressureVal >= PRESSURE_MAX) {
         pressure.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 10000 / cellsVal)
+        healthVal = healthVal - (pressureVal / 500 / cellsVal)
       }
 
       if (virusVal >= VIRUS_HIGH) {
         virus.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 10000 / virusVal)
+        healthVal = healthVal - (pressureVal / 100 / virusVal)
       }
 
       if (pressureVal < 0.0001) {
@@ -193,25 +193,28 @@ const fluid = function () {
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
     for (let i = 0, n = imageData.data.length; i < n; i += 2) {
-      (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
+      (imageData.data[i + 4] < threshold) && (imageData.data[i + 2] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
     
-    if (!alive && !complete) {
-      health.textContent = 'no'
-      ttl.textContent = ttlVal
-      btn.disabled = ''
-      
+    if (!alive) {
+      cellsVal = 0.0
       pressureVal = 0.0
-
-      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
-      avgs.push(ttlVal)
-      const total = avgs.reduce((a, b) => a + b, 0)
-      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
-      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
-      avgInfo.textContent = (total / avgs.length).toFixed(5)
-      complete = true
+      
+      if (!complete) {
+        health.textContent = 'no'
+        ttl.textContent = ttlVal
+        btn.disabled = ''
+        
+        let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
+        avgs.push(ttlVal)
+        const total = avgs.reduce((a, b) => a + b, 0)
+        localStorage.setItem('levvvels-avg-curr', total / avgs.length)
+        localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+        avgInfo.textContent = (total / avgs.length).toFixed(5)
+        complete = true
+      }
     }
     
     requestAnimationFrame(run)
@@ -263,8 +266,8 @@ const fluid = function () {
     let cellY = Math.round(this.y / spacing)
     let close = []
 
-    for (let xOff = -1; xOff < 2; xOff++) {
-      for (let yOff = -1; yOff < 2; yOff++) {
+    for (let xOff = -1; xOff < 3; xOff++) {
+      for (let yOff = -1; yOff < 3; yOff++) {
         const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
 
         if (cell && cell.length) {
@@ -294,7 +297,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.7
+    forceA = (forceA - 2) * 0.6
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -326,24 +329,6 @@ const fluid = function () {
     }
 
     this.draw()
-    /*
-    if (healthVal < 1 || !alive) {
-      ctxPressure.clearRect(0, 0, ctxPressure.width, ctxPressure.height)
-      ctxPressure.fillStyle = 'black'
-      ctxPressure.fill()
-      health.textContent = 'no'
-      ttl.textContent = ttlVal
-      btn.disabled = ''
-
-      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
-      avgs.push(ttlVal)
-      const total = avgs.reduce((a, b) => a + b, 0)
-      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
-      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
-      avgInfo.textContent = (total / avgs.length).toFixed(5)
-
-    }
-    */
   };
 
   Particle.prototype.draw = function () {
@@ -379,11 +364,9 @@ const fluid = function () {
           color2 = 'hsla(157, 75%, 64%';
         } else if (bacteriaVal >= BACTERIA_HIGH) {
           color2 = 'hsla(84, 86%, 42%';
-        }
-        
-        if (cellsVal > CELL_MIN && cellsVal < CELL_MAX) {
+        } else if (cellsVal > CELL_MIN) {
           color = 'hsla(338, 100%, 55%';
-        } else {
+        } else if (cellsVal < CELL_MAX) {
           color = 'hsla(157, 100%, 44%';
         }
 
