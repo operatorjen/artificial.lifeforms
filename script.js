@@ -81,15 +81,15 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 120
-  const spacing = 30
-  const radius = 60
+  let threshold = 100
+  const spacing = 50
+  const radius = 120
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(360, 93%, 55%`;
-      let color2 = `hsla(14, 73%, 35%`;
+      let color = `hsla(${Math.round(cellsVal / pressureVal * 300)}, 93%, 55%`;
+      let color2 = `hsla(${Math.round(virusVal / bacteriaVal * 50)}, ${Math.round(virusVal / bacteriaVal * 70)}%, 35%`;
 
       console.log(color, color2)
       if (!started || !textures[i]) {
@@ -100,12 +100,12 @@ const fluid = function () {
       
       if (textures[i]) {
         const nctx = textures[i].getContext('2d')
-
+        nctx.clearRect(0, 0, width, height)
         const grad = nctx.createRadialGradient(
           radius, radius, 0.2,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 0.8)')
-        grad.addColorStop(0.9, color2 + ', 0.01)')
+        grad.addColorStop(0, color + ', 1)')
+        grad.addColorStop(0.99, color2 + ', 0.005)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -227,9 +227,9 @@ const fluid = function () {
 
     // particle animation start
 
-    //if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
-    //  metaCtx.clearRect(0, 0, width, height)
-    //}
+    if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
+      metaCtx.clearRect(0, 0, width, height)
+    }
     
  
     for (let i = 0, l = numX * numY; i < l; i++) {
@@ -401,7 +401,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 30 * cellsVal * pressureVal
+    const size = radius * 10
 
     metaCtx.drawImage(
       textures[this.type],
