@@ -197,7 +197,7 @@ const fluid = function () {
 
     // particle animation start
 
-    metaCtx.clearRect(0, 0, width, height)
+   // metaCtx.clearRect(0, 0, width, height)
 
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
@@ -221,12 +221,12 @@ const fluid = function () {
       particles[i].first_process()
     }
     
-    threshold = pressureVal * 130
+    threshold = pressureVal * 130 * virusVal * bacteriaVal * 10
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 3) {
-      (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
+    for (let i = 0, n = imageData.data.length; i < n; i += 4) {
+      (imageData.data[i + 5] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
@@ -392,7 +392,7 @@ const fluid = function () {
 
       for (let i = 0; i < GROUPS.length; i++) {
         let color = 'hsla(331, 100%, 64%';
-        let color2 = `hsla(${cellsVal * 180}, 75%, 64%`;
+        let color2 = `hsla(${cellsVal * 280}, 75%, 64%`;
 
         textures[i] = document.createElement('canvas')
         textures[i].width = textures[i].height = radius * 10
@@ -426,8 +426,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * 2),
-              radius + Math.random() * (height - radius * 2)))
+              radius + Math.random() * (width - radius * cellsVal * 5),
+              radius + Math.random() * (height - radius * cellsVal * 3)))
         }
       }
 
