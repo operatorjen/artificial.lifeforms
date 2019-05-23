@@ -114,7 +114,7 @@ const fluid = function () {
       let color2 = `hsla(${Math.round(cellsVal * 210) + 11}, 63%, 20%`;
       
       if (ttlVal > 500 && ttlVal <= 1000) {
-        color2 = `hsla(${Math.round(virusVal / bacteriaVal * 45) + 160}, 73%, 45%`;
+        color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
         color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 83%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
