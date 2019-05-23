@@ -9,6 +9,7 @@ const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
 ctxPressure.height = canvasPressure.height = 300
+let final = document.querySelector('#final')
 
 let btn = document.querySelector('button')
 const rebirths = document.querySelector('#rebirths span')
@@ -252,6 +253,10 @@ const fluid = function () {
       localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
       localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
       avgInfo.textContent = (total / avgs.length).toFixed(5)
+      final.querySelector('.ttl span').textContent = ttlVal
+      final.querySelector('.lifespan span').textContent = total / avgs.length
+      
+      final.querySelector('#experiences').textContent = experiences.join(' => ')
       complete = true
       metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   

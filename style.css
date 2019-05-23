@@ -89,5 +89,16 @@ button[disabled] {
   left: 0;
   padding: 10px;
   z-index: 3;
-  color: 
+  color: rgba(202, 170, 50, 0.9);
+  line-height: 1.3rem;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  font-size: 1.1rem;
 }
