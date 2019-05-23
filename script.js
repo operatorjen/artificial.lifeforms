@@ -33,7 +33,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 100, 50]
+const GROUPS = [50, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -88,8 +88,8 @@ const fluid = function () {
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(cellsVal / pressureVal * 300)}, 93%, 55%`;
-      let color2 = `hsla(${Math.round(virusVal / bacteriaVal * 50)}, ${Math.round(virusVal / bacteriaVal * 70)}%, 35%`;
+      let color = `hsla(${Math.round(cellsVal / pressureVal * 25) - 10}, 83%, 45%`;
+      let color2 = `hsla(${Math.round(virusVal / bacteriaVal * 50) - 20}, 60%, 35%`;
 
       console.log(color, color2)
       if (!started || !textures[i]) {
