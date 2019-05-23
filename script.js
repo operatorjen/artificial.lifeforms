@@ -39,7 +39,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 100, 50]
+const GROUPS = [100, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -52,16 +52,16 @@ let canvas = canvasPressure
 let alive = true
 let complete = false
 
-let height = window.innerHeight
-let width = window.innerWidth
+let height = window.innerHeight / 2
+let width = window.innerWidth / 2
 
 const fluid = function () {  
   let numX, numY, particles, 
       grid, textures, numParticles
 
-  const threshold = 100 * Math.random()
-  const spacing = 30 * Math.random()
-  const radius = Math.random() * 100
+  const threshold = 50
+  const spacing = 10
+  const radius = 50
   const limit = radius
 
   const run = function () {
@@ -199,7 +199,7 @@ const fluid = function () {
 
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
-    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+    for (let i = 0, n = imageData.data.length; i < n; i += 3) {
       (imageData.data[i + 1] < threshold) && (imageData.data[i + 2] /= 2)
     }
 
@@ -248,8 +248,8 @@ const fluid = function () {
     this.vx = this.x - this.px
     this.vy = this.y - this.py
 
-    const distX = this.x * window.innerWidth
-    const distY = this.y * window.innerHeight
+    const distX = this.x - Math.random() * window.innerWidth
+    const distY = this.y - Math.random() * window.innerHeight
     const dist = Math.sqrt(distX * distX + distY * distY)
 
     if (dist < radius) {
@@ -295,9 +295,6 @@ const fluid = function () {
                 particle.m = m
                 particle.dfx = (dfx / distance) * m
                 particle.dfy = (dfy / distance) * m
-                particle.input = particle.dfx // / particle.dfy
-                particle.output = particle.dfy // / particle.dfx
-                //console.log(particle.input, particle.output)
                 close.push(particle)
               }
             }
@@ -341,7 +338,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * cellsVal * 300
+    const size = radius * 50
 
     metaCtx.drawImage(
       textures[this.type],
@@ -357,8 +354,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight
-      canvas.width = width = window.innerWidth
+      canvas.height = height = window.innerHeight / 2
+      canvas.width = width = window.innerWidth / 2
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -388,7 +385,7 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.5,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 1)')
+        grad.addColorStop(0, color + ', 0.4)')
         grad.addColorStop(1, color2 + ', 0)')
         nctx.fillStyle = grad
         nctx.beginPath()
