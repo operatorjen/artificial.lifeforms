@@ -52,6 +52,34 @@ let canvas = canvasPressure
 let alive = true
 let complete = false
 
+const SKILLS = {
+  0: [1, 5, 8], // speaking
+  1: [0, 2, 6, 7, 9], // moving
+  2: [1, 4, 5], // thinking
+  3: [3, 4] // resting
+}
+
+const OPPORTUNITIES = {
+  0: 'running',
+  1: 'teaching',
+  2: 'swimming',
+  3: 'sleeping',
+  4: 'meditating',
+  5: 'writing',
+  6: 'hiking',
+  7: 'stretching',
+  8: 'interpreting',
+  9: 'climbing'
+}
+
+let experiences = []
+
+function setStatus () {
+  const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
+  const status = OPPORTUNITIES[Math.floor(Math.random() * SKILLS[skill].length)]
+  experiences.push(status)
+}
+
 const fluid = function () {
   let width, height, numX, numY, particles,
       grid, textures, numParticles
@@ -169,7 +197,7 @@ const fluid = function () {
       ttl.textContent = ttlVal
       ttlVal++
       
-      if (ttlVal % 500 === 0) {
+      if (ttlVal % 10 === 0) {
         setStatus()
       }
     }
@@ -222,6 +250,7 @@ const fluid = function () {
       const total = avgs.reduce((a, b) => a + b, 0)
       localStorage.setItem('levvvels-avg-curr', total / avgs.length)
       localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+      localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
       avgInfo.textContent = (total / avgs.length).toFixed(5)
       complete = true
       metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
