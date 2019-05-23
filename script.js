@@ -56,7 +56,7 @@ let height = window.innerHeight
 let width = window.innerWidth
 
 const fluid = function () {
-  let numX, numY, particles,
+  let width, height, numX, numY, particles,
       grid, textures, numParticles
 
   const threshold = 30
@@ -272,7 +272,7 @@ const fluid = function () {
     let cellY = Math.round(this.y / spacing)
     let close = []
 
-    for (let xOff = -1; xOff < 3; xOff++) {
+    for (let xOff = -1; xOff < 2; xOff++) {
       for (let yOff = -1; yOff < 2; yOff++) {
         const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
 
@@ -300,7 +300,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.65
+    forceA = (forceA - 2) * 0.25
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -339,8 +339,8 @@ const fluid = function () {
 
     metaCtx.drawImage(
       textures[this.type],
-      this.x - radius + canvas.width / 3,
-      this.y - radius + canvas.height / 3,
+      this.x - radius,
+      this.y - radius,
       size, size)
   }
 
