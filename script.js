@@ -80,9 +80,9 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, textures, numParticles
 
-  let threshold = 50
+  let threshold = 20
   const spacing = 10
-  const radius = 80
+  const radius = 40
   const limit = radius
 
   const run = function () {
@@ -383,7 +383,7 @@ const fluid = function () {
       textures = []
 
       canvas.height = height = window.innerHeight / 3.2
-      canvas.width = width = window.innerWidth / 1.5
+      canvas.width = width = window.innerWidth / 2.5
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -392,11 +392,10 @@ const fluid = function () {
 
       for (let i = 0; i < GROUPS.length; i++) {
         let color = 'hsla(331, 100%, 64%';
-        let color2 = 'hsla(57, 75%, 64%';
-
+        let color2 = `hsla(${cellsVal * 180}, 75%, 64%`;
 
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 5
+        textures[i].width = textures[i].height = radius * 10
 
         const nctx = textures[i].getContext('2d')
 
@@ -404,7 +403,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(1, color2 + ', 0.05)')
+        grad.addColorStop(0.8, color2 + ', 0.05)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
