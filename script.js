@@ -4,7 +4,6 @@ let bacteria = document.querySelector('#bacteria input')
 let virus = document.querySelector('#virus input')
 const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
-const avgInfo = document.querySelector('#avg span')
 const canvasPressure = document.querySelector('#pressure-cv')
 const ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
@@ -25,9 +24,6 @@ pressure.value = pressureVal
 cells.value = cellsVal
 bacteria.value = bacteriaVal
 virus.value = virusVal
-
-rebirths.textContent = localStorage.getItem('levvvels-avg-arr') &&
-  JSON.parse(localStorage.getItem('levvvels-avg-arr')).length || 0
 
 const PRESSURE_MIN = 0.3
 const PRESSURE_MAX = 0.99
@@ -240,8 +236,6 @@ const fluid = function () {
     ctxPressure.putImageData(imageData, 0, 0)
 
     if (!alive && !complete) {
-      cellsVal = 0.0
-      pressureVal = 0.0
       health.textContent = 'no'
       ttl.textContent = ttlVal
       btn.disabled = ''
@@ -252,11 +246,12 @@ const fluid = function () {
       localStorage.setItem('levvvels-avg-curr', total / avgs.length)
       localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
       localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
-      avgInfo.textContent = (total / avgs.length).toFixed(5)
       final.querySelector('.ttl span').textContent = ttlVal
       final.querySelector('.lifespan span').textContent = total / avgs.length
-      
+      final.querySelector('.rebirths span').textContent = total
       final.querySelector('#experiences').textContent = experiences.join(' => ')
+      final.classList.remove('hidden')
+      console.log('got here')
       complete = true
       metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   
