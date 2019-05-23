@@ -85,7 +85,7 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 110
-  const spacing = 80
+  const spacing = 2
   const radius = 70
   const limit = radius
   
@@ -93,6 +93,12 @@ const fluid = function () {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 135) + 40}, 33%, 45%`;
       let color2 = `hsla(${Math.round(cellsVal * 20) + 340}, 80%, 55%`;
+      
+      if (ttlVal > 500) {
+        color2 = `hsla(${Math.round(cellsVal * 55) + 60}, 33%, 45%`;
+      } else if (ttlVal > 1000) {
+        color2 = `hsla(${Math.round(cellsVal * 105) + 10}, 63%, 45%`;
+      }
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
@@ -107,7 +113,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.9, color2 + ', 0.05)')
+        grad.addColorStop(0.9, color2 + ', 0.003)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -400,7 +406,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 13
+    const size = radius * 15
 
     metaCtx.drawImage(
       textures[this.type],
@@ -426,7 +432,7 @@ const fluid = function () {
       setHealth(cellsVal, bacteriaVal, virusVal)
 
       numX = Math.round(width / spacing) + 1
-      numY = Math.round(height / spacing) + 1
+      numY = Math.round(height / spacing) + 5
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
