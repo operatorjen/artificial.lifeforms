@@ -6,8 +6,6 @@ const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
 let canvasPressure = document.querySelector('#pressure-cv')
 let ctxPressure = canvasPressure.getContext('2d')
-ctxPressure.width = canvasPressure.width = 500
-ctxPressure.height = canvasPressure.height = 300
 let final = document.querySelector('#final')
 let btn = document.querySelector('button')
 const rebirths = document.querySelector('#rebirths span')
@@ -80,9 +78,9 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, textures, numParticles
 
-  let threshold = 20
+  let threshold = 120
   const spacing = 10
-  const radius = 10
+  const radius = 30
   const limit = radius
 
   const run = function () {
@@ -197,9 +195,12 @@ const fluid = function () {
 
     // particle animation start
 
-    if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
-     // metaCtx.clearRect(0, 0, width, height)
-    }
+    //if (ttlVal % 90 === 0 || ttlVal % 100 === 0) {
+      metaCtx.clearRect(0, 0, width, height)
+    //}
+    
+    ctxPressure.fillStyle = `hsla(${cellsVal * 280}, 75%, 64%, 1)`;
+    ctxPressure.fill()
       
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
@@ -376,13 +377,37 @@ const fluid = function () {
       this.y - radius,
       size, size)
   }
+  
+  Particle.prototype.setHealth = function () {
+    let textures = []
+    
+    for (let i = 0; i < GROUPS.length; i++) {
+      let color = 'hsla(351, 100%, 64%';
+      let color2 = `hsla(${cellsVal * 320}, 75%, 64%`;
+
+      textures[i] = document.createElement('canvas')
+      textures[i].width = textures[i].height = radius * 9
+
+      const nctx = textures[i].getContext('2d')
+
+      const grad = nctx.createRadialGradient(
+        radius, radius, 0.2,
+        radius, radius, radius)
+      grad.addColorStop(0, color + ', 1)')
+      grad.addColorStop(0.9, color2 + ', 0.05)')
+      nctx.fillStyle = grad
+      nctx.beginPath()
+      nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
+      nctx.closePath()
+      nctx.fill()
+    }
+  }
 
   return {
     init: function () {
       particles = []
       grid = []
       close = []
-      textures = []
 
       canvas.height = height = 300 //window.innerHeight / 3.2
       canvas.width = width = 300 //window.innerWidth / 2.5
@@ -392,29 +417,10 @@ const fluid = function () {
       metaCanvas.height = height
       metaCtx = metaCanvas.getContext('2d')
 
-      for (let i = 0; i < GROUPS.length; i++) {
-        let color = 'hsla(331, 100%, 64%';
-        let color2 = `hsla(${cellsVal * 280}, 75%, 64%`;
+      this.setHealth()
 
-        textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 10
-
-        const nctx = textures[i].getContext('2d')
-
-        const grad = nctx.createRadialGradient(
-          radius, radius, 0.2,
-          radius, radius, radius)
-        grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.9, color2 + ', 0.005)')
-        nctx.fillStyle = grad
-        nctx.beginPath()
-        nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
-        nctx.closePath()
-        nctx.fill()
-      }
-
-      numX = Math.round(width / spacing) + 10
-      numY = Math.round(height / spacing) + 10
+      numX = Math.round(width / spacing) + 1
+      numY = Math.round(height / spacing) + 1
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
