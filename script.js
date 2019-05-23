@@ -52,17 +52,17 @@ let canvas = canvasPressure
 let alive = true
 let complete = false
 
-let height = window.innerHeight / 2
-let width = window.innerWidth / 2
+let height = window.innerHeight
+let width = window.innerWidth
 
 const fluid = function () {  
   let numX, numY, particles, 
       grid, textures, numParticles
 
-  const threshold = 100
-  const spacing = 1
-  const radius = 10
-  const limit = 1
+  const threshold = 100 * Math.random()
+  const spacing = 30 * Math.random()
+  const radius = Math.random() * 100
+  const limit = radius
 
   const run = function () {
     pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
@@ -160,6 +160,11 @@ const fluid = function () {
       cells.classList.remove('critical')
       healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
     }
+    
+    if (cellsVal < CELL_MIN) {
+      cells.classList.add('critical')
+      healthVal = 0.0
+    }
 
     if (healthVal >= 1 && alive) {
       ttl.textContent = ttlVal
@@ -167,6 +172,8 @@ const fluid = function () {
     }
     
     // particle animation start
+    
+    metaCtx.clearRect(0, 0, width, height)
 
     for (let i = 0, l = numX * numY; i < l; i++) {
       grid[i].length = 0
@@ -215,9 +222,11 @@ const fluid = function () {
         avgInfo.textContent = (total / avgs.length).toFixed(5)
         complete = true
       }
+      
+      run()
+    } else {
+      requestAnimationFrame(run) 
     }
-    
-    requestAnimationFrame(run)
   };
 
   const Particle = function (type, x, y) {
@@ -348,8 +357,8 @@ const fluid = function () {
       close = []
       textures = []
 
-      canvas.height = height = window.innerHeight / 2
-      canvas.width = width = window.innerWidth / 2
+      canvas.height = height = window.innerHeight
+      canvas.width = width = window.innerWidth
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -368,6 +377,7 @@ const fluid = function () {
           color = 'hsla(338, 100%, 55%';
         } else if (cellsVal < CELL_MAX) {
           color = 'hsla(157, 100%, 44%';
+          color2 = 'hsla(157, 75%, 64%';
         }
 
         textures[i] = document.createElement('canvas')
