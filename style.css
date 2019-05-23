@@ -84,12 +84,9 @@ button[disabled] {
 }
 
 #final {
+  position: absolute;
   opacity: 1.0;
   transition: 1s opacity;
-}
-
-#final.hidden {
-  position: absolute;
   top: 100px;
   left: 0;
   width: 95vw;
@@ -98,6 +95,9 @@ button[disabled] {
   color: rgba(202, 170, 50, 0.9);
   line-height: 1.3rem;
   font-size: 1.1rem;
+}
+
+#final.hidden {
   opacity: 0.0;
 }
 
@@ -105,6 +105,10 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+#experiences {
+  width: auto;
 }
 
 li {

@@ -4,12 +4,11 @@ let bacteria = document.querySelector('#bacteria input')
 let virus = document.querySelector('#virus input')
 const health = document.querySelector('#health span')
 const ttl = document.querySelector('#time span')
-const canvasPressure = document.querySelector('#pressure-cv')
-const ctxPressure = canvasPressure.getContext('2d')
+let canvasPressure = document.querySelector('#pressure-cv')
+let ctxPressure = canvasPressure.getContext('2d')
 ctxPressure.width = canvasPressure.width = 500
 ctxPressure.height = canvasPressure.height = 300
 let final = document.querySelector('#final')
-
 let btn = document.querySelector('button')
 const rebirths = document.querySelector('#rebirths span')
 
@@ -36,7 +35,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 50]
+const GROUPS = [150, 150, 150]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -247,11 +246,10 @@ const fluid = function () {
       localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
       localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
       final.querySelector('.ttl span').textContent = ttlVal
-      final.querySelector('.lifespan span').textContent = total / avgs.length
+      final.querySelector('.lifespan span').textContent = (total / avgs.length).toFixed(2)
       final.querySelector('.rebirths span').textContent = total
       final.querySelector('#experiences').textContent = experiences.join(' => ')
       final.classList.remove('hidden')
-      console.log('got here')
       complete = true
       metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   
