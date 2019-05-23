@@ -69,12 +69,23 @@ const OPPORTUNITIES = {
   12: 'screaming'
 }
 
+const SIDE_EFFECTS = {
+  0: 'injury',
+  1: 'illness',
+  2: 'therapy',
+  3: 'amnesia',
+  4: 'mood',
+  5: 'relaxing',
+  6: 'neutral'
+}
+
 let experiences = []
 
 function setStatus () {
+  const sideEffect = SIDE_EFFECTS[Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)]
   const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
   const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
-  experiences.push(status)
+  experiences.push(`${status} ${SIDE_EFFECTS[Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length])}`)
 }
 
 let textures = {}
