@@ -82,10 +82,15 @@ const SIDE_EFFECTS = {
 let experiences = []
 
 function setStatus () {
-  const sideEffect = SIDE_EFFECTS[Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)]
+  const sideEffect = Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)
   const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
   const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
-  experiences.push(`${status} ${SIDE_EFFECTS[Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length])}`)
+  experiences.push(`${status} ${SIDE_EFFECTS[sideEffect]}`)
+  console.log(sideEffect)
+  if (sideEffect < 3) {
+    console.log('got bad stuff ', sideEffect)
+    cellsVal -= 0.005
+  }
 }
 
 let textures = {}
