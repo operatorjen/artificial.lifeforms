@@ -103,9 +103,9 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 13
-  const spacing = 40
-  const radius = 50
+  let threshold = 10
+  const spacing = 10
+  const radius = 80
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -114,12 +114,12 @@ const fluid = function () {
       let color2 = `hsla(${Math.round(cellsVal * 210) + 11}, 63%, 20%`;
       
       if (ttlVal > 500 && ttlVal <= 1000) {
-        color2 = `hsla(${Math.round(cellsVal * 45) + 160}, 73%, 45%`;
+        color2 = `hsla(${Math.round(virusVal / bacteriaVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
         color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 83%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
-        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 55%`;
+        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
       } else if (ttlVal > 2000) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 65%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
@@ -141,7 +141,7 @@ const fluid = function () {
           radius, radius, 0.8,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.5, color2 + ', 0.3)')
+        grad.addColorStop(0.5, color2 + ', 0.04)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
