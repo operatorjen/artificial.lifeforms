@@ -403,7 +403,7 @@ const fluid = function () {
           radius, radius, 0.2,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.8, color2 + ', 0.05)')
+        grad.addColorStop(0.9, color2 + ', 0.005)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
