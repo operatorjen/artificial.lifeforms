@@ -112,7 +112,7 @@ const fluid = function () {
 
   let threshold = 10
   const spacing = canvas.width / canvas.height * 10
-  const radius = canvas.width / canvas.height * 85
+  const radius = canvas.width / canvas.height * 30
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -461,8 +461,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = window.innerHeight
-      canvas.width = width = window.innerWidth
+      canvas.height = height = 200;
+      canvas.width = width = 200;
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -485,8 +485,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              radius + Math.random() * (width - radius * cellsVal * 3),
-              radius + Math.random() * (height - radius * cellsVal * 3)))
+              Math.sin(radius + Math.random() * (width - radius * cellsVal * 3)),
+              Math.cos(radius + Math.random() * (height - radius * cellsVal * 3))))
         }
       }
 
