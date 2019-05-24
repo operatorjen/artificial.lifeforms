@@ -112,7 +112,7 @@ const fluid = function () {
 
   let threshold = 10
   const spacing = canvas.width / 3
-  const radius = 180
+  const radius = canvas.width / canvas.height * 65
   const limit = radius
   
   const setHealth = function (cellsVal) {
