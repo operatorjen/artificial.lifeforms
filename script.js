@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 10, 10]
+const GROUPS = [50, 40, 10]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -111,8 +111,8 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 10
-  const spacing = canvas.width / canvas.height * 51
-  const radius = canvas.width / canvas.height * 45
+  const spacing = canvas.width / canvas.height * 10
+  const radius = canvas.width / canvas.height * 85
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -462,7 +462,7 @@ const fluid = function () {
       close = []
 
       canvas.height = height = window.innerHeight
-      canvas.width = width = window.innerWidth
+      canvas.width = width = window.innerWidth / 10
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
