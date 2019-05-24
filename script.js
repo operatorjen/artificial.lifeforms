@@ -96,6 +96,11 @@ function setStatus () {
   } else if (sideEffect > 3) {
     cellsVal += 0.000001
   }
+  
+  if (sideEffect === 1) {
+    virusVal += 0.0001
+    bacteriaVal += 0.0001
+  }
 }
 
 let textures = {}
@@ -106,7 +111,7 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 10
-  const spacing = 10
+  const spacing = canvas.width / 3
   const radius = 80
   const limit = radius
   
