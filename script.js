@@ -315,7 +315,7 @@ const fluid = function () {
       final.querySelector('.ttl span').textContent = ttlVal
       final.querySelector('.lifespan span').textContent = (total / avgs.length).toFixed(2)
       final.querySelector('.rebirths span').textContent = avgs.length
-      final.querySelector('#experiences').innerHTML = experiences.join('')
+      final.querySelector('#experiences').innerHTML = experiences.map(e => `<p>${e[0]} <em>${e[1]}</em></p>`)
       final.classList.remove('hidden')
       deathBy.textContent = experiences[experiences.length - 1][0]
       sideEffectBy.textContent = experiences[experiences.length - 1][1]
@@ -460,7 +460,6 @@ const fluid = function () {
       metaCanvas.width = width
       metaCanvas.height = height
       metaCtx = metaCanvas.getContext('2d')
-      console.log(cellsVal, bacteriaVal, virusVal)
       setHealth(cellsVal, bacteriaVal, virusVal)
 
       numX = Math.round(width / spacing) + 1
