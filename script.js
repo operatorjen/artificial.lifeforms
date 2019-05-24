@@ -111,8 +111,8 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 10
-  const spacing = canvas.width / 3
-  const radius = canvas.width / canvas.height * 65
+  const spacing = canvas.width / canvas.height * 51
+  const radius = canvas.width / canvas.height * 45
   const limit = radius
   
   const setHealth = function (cellsVal) {
