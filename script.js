@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 50]
+const GROUPS = [50, 10, 10]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -112,7 +112,7 @@ const fluid = function () {
 
   let threshold = 10
   const spacing = canvas.width / 3
-  const radius = 80
+  const radius = 180
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -123,7 +123,7 @@ const fluid = function () {
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
-        color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 83%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 63%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
