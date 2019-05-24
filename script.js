@@ -462,7 +462,7 @@ const fluid = function () {
       close = []
 
       canvas.height = height = window.innerHeight
-      canvas.width = width = window.innerWidth / 10
+      canvas.width = width = window.innerWidth
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
