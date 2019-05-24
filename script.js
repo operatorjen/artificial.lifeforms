@@ -10,6 +10,8 @@ let final = document.querySelector('#final')
 let btn = document.querySelector('#rebirth')
 let btnReset = document.querySelector('#reset')
 const rebirths = document.querySelector('#rebirths span')
+let deathBy = document.querySelector('#death-by')
+let sideEffectBy = document.querySelector('#side-effect-by')
 
 let pressureVal = 0.6
 let cellsVal = 0.9
@@ -75,7 +77,7 @@ const SIDE_EFFECTS = {
   1: 'ill',
   2: 'tired',
   3: 'moody',
-  4: 'therapeutic',
+  4: 'relieved',
   5: 'relaxed',
   6: 'neutral',
   7: 'energetic'
@@ -87,7 +89,7 @@ function setStatus () {
   const sideEffect = Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)
   const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
   const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
-  experiences.push(`<p>${status} <em>${SIDE_EFFECTS[sideEffect]}</em></p>`)
+  experiences.push([status, SIDE_EFFECTS[sideEffect]])
 
   if (sideEffect < 3) {
     cellsVal -= 0.000002
@@ -141,7 +143,7 @@ const fluid = function () {
           radius, radius, 0.8,
           radius, radius, radius)
         grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.5, color2 + ', 0.04)')
+        grad.addColorStop(0.9, color2 + ', 0.004)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -315,6 +317,8 @@ const fluid = function () {
       final.querySelector('.rebirths span').textContent = avgs.length
       final.querySelector('#experiences').innerHTML = experiences.join('')
       final.classList.remove('hidden')
+      deathBy.textContent = experiences[experiences.length - 1][0]
+      sideEffectBy.textContent = experiences[experiences.length - 1][1]
       complete = true
      // metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
   
