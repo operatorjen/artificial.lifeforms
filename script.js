@@ -94,7 +94,7 @@ function setStatus () {
   if (sideEffect < 3) {
     cellsVal -= 0.000002
   } else if (sideEffect > 3) {
-    cellsVal += 0.000001
+    cellsVal += 0.000002
   }
   
   if (sideEffect === 1) {
@@ -117,8 +117,8 @@ const fluid = function () {
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 73%, 45%`;
-      let color2 = `hsla(${Math.round(cellsVal * 210) + 11}, 63%, 20%`;
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 45%`;
+      let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
       
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
@@ -131,8 +131,11 @@ const fluid = function () {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 65%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
       } else if (ttlVal > 2500) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 75)}, 33%, 65%`;
-        color2 = `hsla(${Math.round(cellsVal * 240) + 41}, 83%, 35%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 85) + 110}, 23%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 110) + 151}, 83%, 40%`;
+      } else if (ttlVal > 3000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 10) + 151}, 33%, 10%`;
       }
 
       if (!started || !textures[i]) {
