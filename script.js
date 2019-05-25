@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 70, 50]
+const GROUPS = [50, 100, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -449,7 +449,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 10
+    const size = radius * 2
 
     metaCtx.drawImage(
       textures[this.type],
@@ -464,8 +464,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = 500;
-      canvas.width = width = 300;
+      canvas.height = height = window.innerHeight / 2;
+      canvas.width = width = window.innerWidth / 2;
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -488,8 +488,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              Math.random() * 300,
-              Math.random() * 500))
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerHeight))
         }
       }
 
