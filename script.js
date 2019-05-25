@@ -127,13 +127,13 @@ const fluid = function () {
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
-      } else if (ttlVal > 2000) {
+      } else if (ttlVal > 2000 && ttlVal <= 2500) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
-      } else if (ttlVal > 2500) {
+      } else if (ttlVal > 2500 && ttlVal <= 3000) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 185) + 10}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 215) + 110}, 63%, 45%`;
-      } else if (ttlVal > 3000) {
+      } else if (ttlVal > 3000 && ttlVal <= 3500) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
       } else if (ttlVal > 3500) {
@@ -154,7 +154,7 @@ const fluid = function () {
           radius, radius, 0.8,
           radius, radius, radius)
         grad.addColorStop(0, color2 + ', 1)')
-        grad.addColorStop(1, color + ', 0.05)')
+        grad.addColorStop(0.9, color + ', 0.05)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -173,20 +173,20 @@ const fluid = function () {
 
     if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
- //     cellsVal -= bacteriaVal * cellsVal
+      cellsVal -= bacteriaVal * cellsVal
     } else if (bacteriaRandom >= BACTERIA_HIGH)  {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-  //    cellsVal -= bacteriaVal * cellsVal
+      cellsVal -= bacteriaVal * cellsVal
 
       if (virusVal >= VIRUS_HIGH) {
-  //      cellsVal -= virusVal * cellsVal
+        cellsVal -= virusVal * cellsVal
       }
     }
 
     const virusRandom = Math.random()
     if (bacteriaRandom >= BACTERIA_HIGH) {
       virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
-  //    healthVal --
+      healthVal --
     } else if (bacteriaRandom > BACTERIA_LOW) {
       virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
     } else {
@@ -222,19 +222,19 @@ const fluid = function () {
         (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
       if (cellsVal < CELL_MIN) {
         cells.classList.add('critical')
- //       healthVal = healthVal - (pressureVal / 100 / cellsVal)
+        healthVal = healthVal - (pressureVal / 100 / cellsVal)
       } else {
         cells.classList.remove('critical')
       }
 
       if (pressureVal >= PRESSURE_MAX) {
         pressure.classList.add('critical')
-   //     healthVal = healthVal - (pressureVal / 500 / cellsVal)
+        healthVal = healthVal - (pressureVal / 500 / cellsVal)
       }
 
       if (virusVal >= VIRUS_HIGH) {
         virus.classList.add('critical')
-   //     healthVal = healthVal - (pressureVal / 100 / virusVal)
+        healthVal = healthVal - (pressureVal / 100 / virusVal)
       }
 
       if (pressureVal < 0.0001) {
@@ -305,7 +305,7 @@ const fluid = function () {
     const imageData = metaCtx.getImageData(0, 0, width, height)
 
     for (let i = 0, n = imageData.data.length; i < n; i += 2) {
-      (imageData.data[i + 2] < threshold) && (imageData.data[i + 1] /= 2)
+      (imageData.data[i + 1] < threshold) && (imageData.data[i + 1] /= 2)
     }
 
     ctxPressure.putImageData(imageData, 0, 0)
