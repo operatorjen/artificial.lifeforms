@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 40, 10]
+const GROUPS = [100, 40, 60]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -112,7 +112,7 @@ const fluid = function () {
 
   let threshold = 10
   const spacing = canvas.width / canvas.height * 10
-  const radius = canvas.width / canvas.height * 30
+  const radius = canvas.width / canvas.height * 10
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -411,7 +411,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.25
+    forceA = (forceA - 2) * 0.05
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -446,7 +446,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 15
+    const size = radius * 5
 
     metaCtx.drawImage(
       textures[this.type],

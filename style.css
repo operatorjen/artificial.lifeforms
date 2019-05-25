@@ -63,13 +63,9 @@ label {
 canvas {
   position: absolute;
   top: 20vh;
-  left: 5vw;
+  left: 1vw;
   width: 50vh;
   height: 50vh;
-  border-radius: 100%;
-  border: 20px solid rgba(25, 25, 25, 0.2);
-  box-shadow: #111 -3px -2px 4px;
-  padding: 10px;
 }
 
 button {
