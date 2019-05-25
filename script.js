@@ -94,7 +94,7 @@ function setStatus () {
   if (sideEffect < 3) {
     cellsVal -= 0.000002
   } else if (sideEffect > 3) {
-    cellsVal += 0.000002
+    cellsVal += 0.0000025
   }
   
   if (sideEffect === 1) {
@@ -111,13 +111,13 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 10
-  const spacing = canvas.width / canvas.height * 20
-  const radius = canvas.width / canvas.height * 25
+  const spacing = canvas.width / canvas.height * 10
+  const radius = canvas.width / canvas.height * 20
   const limit = radius
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 45%`;
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 35%`;
       let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
 
       if (ttlVal > 500 && ttlVal <= 1000) {
@@ -143,7 +143,7 @@ const fluid = function () {
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = radius * 15
+        textures[i].width = textures[i].height = cellsVal * Math.random() * 600 + 300
         started = true
       }
       
