@@ -134,7 +134,7 @@ const fluid = function () {
       //  color = `hsla(${Math.round(virusVal / bacteriaVal * 85) + 110}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 110) + 151}, 83%, 40%`;
       } else if (ttlVal > 3000) {
-     //   color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
+       // color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 10) + 151}, 33%, 10%`;
       }
 
@@ -150,8 +150,8 @@ const fluid = function () {
         const grad = nctx.createRadialGradient(
           radius, radius, 0.8,
           radius, radius, radius)
-        grad.addColorStop(0, color + ', 1)')
-        grad.addColorStop(0.9, color2 + ', 0.004)')
+        grad.addColorStop(0, color2 + ', 1)')
+        grad.addColorStop(1, color + ', 0.2)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -411,7 +411,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.95
+    forceA = (forceA - 2) * 0.99
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -446,7 +446,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 15
+    const size = radius * 10
 
     metaCtx.drawImage(
       textures[this.type],
@@ -471,7 +471,7 @@ const fluid = function () {
       setHealth(cellsVal, bacteriaVal, virusVal)
 
       numX = Math.round(width / spacing) + 10
-      numY = Math.round(height / spacing) + 5
+      numY = Math.round(height / spacing) + 15
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
