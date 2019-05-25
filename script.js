@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 50]
+const GROUPS = [50, 70, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -117,21 +117,21 @@ const fluid = function () {
   
   const setHealth = function (cellsVal) {
     for (let i = 0; i < GROUPS.length; i++) {
-      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 35%`;
-      let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 13%, 35%`;
+      let color2 = `hsla(${Math.round(cellsVal * 10) + 11}, 83%, 20%`;
 
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
-        color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 63%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 15) + 30}, 63%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 33%, 45%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
       } else if (ttlVal > 2000 && ttlVal <= 2500) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
       } else if (ttlVal > 2500 && ttlVal <= 3000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 185) + 10}, 33%, 45%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 185) + 10}, 53%, 65%`;
         color2 = `hsla(${Math.round(cellsVal * 215) + 110}, 63%, 45%`;
       } else if (ttlVal > 3000 && ttlVal <= 3500) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
@@ -143,7 +143,7 @@ const fluid = function () {
 
       if (!started || !textures[i]) {
         textures[i] = document.createElement('canvas')
-        textures[i].width = textures[i].height = cellsVal * Math.random() * 600 + 300
+        textures[i].width = textures[i].height = cellsVal * Math.random() * 500 + 200
         started = true
       }
       
@@ -173,20 +173,20 @@ const fluid = function () {
 
     if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
-      cellsVal -= bacteriaVal * cellsVal
+   //   cellsVal -= bacteriaVal * cellsVal
     } else if (bacteriaRandom >= BACTERIA_HIGH)  {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-      cellsVal -= bacteriaVal * cellsVal
+   //   cellsVal -= bacteriaVal * cellsVal
 
       if (virusVal >= VIRUS_HIGH) {
-        cellsVal -= virusVal * cellsVal
+  //      cellsVal -= virusVal * cellsVal
       }
     }
 
     const virusRandom = Math.random()
     if (bacteriaRandom >= BACTERIA_HIGH) {
       virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
-      healthVal --
+  //    healthVal --
     } else if (bacteriaRandom > BACTERIA_LOW) {
       virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
     } else {
@@ -414,7 +414,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.99
+    forceA = (forceA - 2) * 0.9
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -473,8 +473,8 @@ const fluid = function () {
       metaCtx = metaCanvas.getContext('2d')
       setHealth(cellsVal, bacteriaVal, virusVal)
 
-      numX = Math.round(width / spacing) + 10
-      numY = Math.round(height / spacing) + 15
+      numX = Math.round(width / spacing)
+      numY = Math.round(height / spacing)
 
       for (let i = 0; i < numX * numY; i++) {
         grid[i] = {
@@ -488,8 +488,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              Math.random() * cellsVal * 300,
-              Math.random() * cellsVal * 500))
+              Math.random() * 300,
+              Math.random() * 500))
         }
       }
 
