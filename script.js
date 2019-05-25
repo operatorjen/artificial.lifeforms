@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 50, 50]
+const GROUPS = [50, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -119,7 +119,7 @@ const fluid = function () {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 45%`;
       let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
-      
+ 
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
@@ -151,7 +151,7 @@ const fluid = function () {
           radius, radius, 0.8,
           radius, radius, radius)
         grad.addColorStop(0, color2 + ', 1)')
-        grad.addColorStop(1, color + ', 0.2)')
+        grad.addColorStop(1, color + ', 0.05)')
         nctx.fillStyle = grad
         nctx.beginPath()
         nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
@@ -461,8 +461,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = window.innerWidth;
-      canvas.width = width = window.innerHeight;
+      canvas.height = height = window.innerHeight;
+      canvas.width = width = window.innerWidth;
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
