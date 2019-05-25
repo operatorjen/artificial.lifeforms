@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 40, 60]
+const GROUPS = [100, 40, 100]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -110,9 +110,9 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 10
+  let threshold = 30
   const spacing = canvas.width / canvas.height * 10
-  const radius = canvas.width / canvas.height * 10
+  const radius = canvas.width / canvas.height * 5
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -411,14 +411,14 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.05
+    forceA = (forceA - 2) * 0.95
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
       let press = forceA + forceB * neighbor.m
 
       if (this.type !== neighbor.type) {
-        press *= 0.6 * pressureVal
+        press *= 0.96 * pressureVal
       }
 
       const dx = neighbor.dfx * press
@@ -446,7 +446,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 5
+    const size = radius * 15
 
     metaCtx.drawImage(
       textures[this.type],
@@ -461,8 +461,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = 200;
-      canvas.width = width = 200;
+      canvas.height = height = window.innerWidth;
+      canvas.width = width = window.innerHeight;
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -470,7 +470,7 @@ const fluid = function () {
       metaCtx = metaCanvas.getContext('2d')
       setHealth(cellsVal, bacteriaVal, virusVal)
 
-      numX = Math.round(width / spacing) + 1
+      numX = Math.round(width / spacing) + 10
       numY = Math.round(height / spacing) + 5
 
       for (let i = 0; i < numX * numY; i++) {
@@ -485,7 +485,7 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              Math.sin(radius + Math.random() * (width - radius * cellsVal * 3)),
+              Math.sin(radius + Math.random() * (width - radius * cellsVal * 113)),
               Math.cos(radius + Math.random() * (height - radius * cellsVal * 3))))
         }
       }
