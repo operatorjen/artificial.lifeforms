@@ -9,7 +9,7 @@ body {
 div {
   padding: 2px 5px;
   margin: 1px;
-  background-color: rgba(1, 1, 1, 0.6);
+  background-color: #111;
   width: 180px;
 }
 
@@ -30,7 +30,7 @@ div, span, time, label, input {
 input {
   border: 0;
   background-color: transparent;
-  color: rgba(20, 200, 100, 0.8);
+  color: rgb(20, 200, 100);
   width: 100px;
 }
 
@@ -50,7 +50,7 @@ span {
 label {
   width: 55px;
   display: inline-block;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgb(255, 255, 255);
 }
 
 #time, #health {
@@ -61,11 +61,11 @@ label {
 }
 
 canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1000;
-  height: 500;
+  display: block;
+  position: relative;
+  margin: 100px auto;
+  width: 300px;
+  height: 500px;
 }
 
 button {

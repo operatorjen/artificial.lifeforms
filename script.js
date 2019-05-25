@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 100]
+const GROUPS = [50, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -119,9 +119,7 @@ const fluid = function () {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 45%`;
       let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
-      color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 10}, 83%, 55%`;
-        color2 = `hsla(${Math.round(cellsVal * 130) + 81}, 83%, 80%`;
-      
+
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
@@ -139,8 +137,8 @@ const fluid = function () {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
       } else if (ttlVal > 3500) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
-        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 10}, 43%, 55%`;
+        color2 = `hsla(${Math.round(cellsVal * 130) + 181}, 83%, 60%`;
       }
 
       if (!started || !textures[i]) {
@@ -175,20 +173,20 @@ const fluid = function () {
 
     if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
-      cellsVal -= bacteriaVal * cellsVal
+ //     cellsVal -= bacteriaVal * cellsVal
     } else if (bacteriaRandom >= BACTERIA_HIGH)  {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-      cellsVal -= bacteriaVal * cellsVal
+  //    cellsVal -= bacteriaVal * cellsVal
 
       if (virusVal >= VIRUS_HIGH) {
-        cellsVal -= virusVal * cellsVal
+  //      cellsVal -= virusVal * cellsVal
       }
     }
 
     const virusRandom = Math.random()
     if (bacteriaRandom >= BACTERIA_HIGH) {
       virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
-      healthVal --
+  //    healthVal --
     } else if (bacteriaRandom > BACTERIA_LOW) {
       virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
     } else {
@@ -224,19 +222,19 @@ const fluid = function () {
         (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
       if (cellsVal < CELL_MIN) {
         cells.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 100 / cellsVal)
+ //       healthVal = healthVal - (pressureVal / 100 / cellsVal)
       } else {
         cells.classList.remove('critical')
       }
 
       if (pressureVal >= PRESSURE_MAX) {
         pressure.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 500 / cellsVal)
+   //     healthVal = healthVal - (pressureVal / 500 / cellsVal)
       }
 
       if (virusVal >= VIRUS_HIGH) {
         virus.classList.add('critical')
-        healthVal = healthVal - (pressureVal / 100 / virusVal)
+   //     healthVal = healthVal - (pressureVal / 100 / virusVal)
       }
 
       if (pressureVal < 0.0001) {
@@ -466,8 +464,8 @@ const fluid = function () {
       grid = []
       close = []
 
-      canvas.height = height = window.innerHeight;
-      canvas.width = width = window.innerWidth;
+      canvas.height = height = 500;
+      canvas.width = width = 300;
 
       const metaCanvas = document.createElement('canvas')
       metaCanvas.width = width
@@ -490,8 +488,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              Math.random() * cellsVal * 100,
-              Math.random() * cellsVal * 100))
+              Math.random() * cellsVal * 300,
+              Math.random() * cellsVal * 500))
         }
       }
 
