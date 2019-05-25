@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 50, 50]
+const GROUPS = [50, 50, 100]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -111,7 +111,7 @@ const fluid = function () {
       grid, numParticles
 
   let threshold = 10
-  const spacing = canvas.width / canvas.height * 40
+  const spacing = canvas.width / canvas.height * 20
   const radius = canvas.width / canvas.height * 25
   const limit = radius
   
@@ -119,23 +119,28 @@ const fluid = function () {
     for (let i = 0; i < GROUPS.length; i++) {
       let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 33%, 45%`;
       let color2 = `hsla(${Math.round(cellsVal * 190) + 11}, 63%, 20%`;
- 
+      color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 10}, 83%, 55%`;
+        color2 = `hsla(${Math.round(cellsVal * 130) + 81}, 83%, 80%`;
+      
       if (ttlVal > 500 && ttlVal <= 1000) {
         color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`;
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
         color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 63%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
-       // color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 33%, 45%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
       } else if (ttlVal > 2000) {
-      //  color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
       } else if (ttlVal > 2500) {
-      //  color = `hsla(${Math.round(virusVal / bacteriaVal * 85) + 110}, 33%, 45%`;
-        color2 = `hsla(${Math.round(cellsVal * 110) + 151}, 83%, 40%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 185) + 10}, 33%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 215) + 110}, 63%, 45%`;
       } else if (ttlVal > 3000) {
-       // color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
-        color2 = `hsla(${Math.round(cellsVal * 10) + 151}, 33%, 10%`;
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
+      } else if (ttlVal > 3500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
       }
 
       if (!started || !textures[i]) {
