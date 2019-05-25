@@ -136,9 +136,15 @@ const fluid = function () {
       } else if (ttlVal > 3000 && ttlVal <= 3500) {
         color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`;
-      } else if (ttlVal > 3500) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 10}, 43%, 55%`;
-        color2 = `hsla(${Math.round(cellsVal * 130) + 181}, 83%, 60%`;
+      } else if (ttlVal > 3500 && ttlVal <= 4000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 315) + 10}, 83%, 55%`;
+        color2 = `hsla(${Math.round(cellsVal * 221) + 211}, 93%, 20%`;
+      } else if (ttlVal > 4000 && ttlVal <= 4500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 110}, 13%, 5%`;
+        color2 = `hsla(${Math.round(cellsVal * 130) + 70}, 73%, 50%`;
+      } else if (ttlVal > 4500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 110}, 33%, 45%`;
+        color2 = `hsla(${Math.round(cellsVal * 100) + 110}, 73%, 80%`;
       }
 
       if (!started || !textures[i]) {
@@ -414,7 +420,7 @@ const fluid = function () {
       }
     }
 
-    forceA = (forceA - 2) * 0.9
+    forceA = (forceA - 2) * 0.99
 
     for (let i = 0; i < close.length; i++) {
       const neighbor = close[i]
@@ -449,7 +455,7 @@ const fluid = function () {
   };
 
   Particle.prototype.draw = function () {
-    const size = radius * 2
+    const size = radius * 5
 
     metaCtx.drawImage(
       textures[this.type],
