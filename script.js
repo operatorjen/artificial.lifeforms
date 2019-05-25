@@ -36,7 +36,7 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [100, 40, 100]
+const GROUPS = [100, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
@@ -110,9 +110,9 @@ const fluid = function () {
   let width, height, numX, numY, particles,
       grid, numParticles
 
-  let threshold = 30
-  const spacing = canvas.width / canvas.height * 10
-  const radius = canvas.width / canvas.height * 5
+  let threshold = 10
+  const spacing = canvas.width / canvas.height * 40
+  const radius = canvas.width / canvas.height * 25
   const limit = radius
   
   const setHealth = function (cellsVal) {
@@ -125,16 +125,16 @@ const fluid = function () {
       } else if (ttlVal > 1000 && ttlVal <= 1500) {
         color2 = `hsla(${Math.round(cellsVal * 15) + 20}, 63%, 45%`;
       } else if (ttlVal > 1500 && ttlVal <= 2000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`;
+       // color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`;
       } else if (ttlVal > 2000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 65%`;
+      //  color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`;
       } else if (ttlVal > 2500) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 85) + 110}, 23%, 45%`;
+      //  color = `hsla(${Math.round(virusVal / bacteriaVal * 85) + 110}, 33%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 110) + 151}, 83%, 40%`;
       } else if (ttlVal > 3000) {
-        color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
+     //   color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 10}, 83%, 45%`;
         color2 = `hsla(${Math.round(cellsVal * 10) + 151}, 33%, 10%`;
       }
 
@@ -485,8 +485,8 @@ const fluid = function () {
           particles.push(
             new Particle(
               i,
-              Math.sin(radius + Math.random() * (width - radius * cellsVal * 113)),
-              Math.cos(radius + Math.random() * (height - radius * cellsVal * 3))))
+              Math.random() * cellsVal * 100,
+              Math.random() * cellsVal * 100))
         }
       }
 
