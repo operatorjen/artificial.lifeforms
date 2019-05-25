@@ -173,20 +173,20 @@ const fluid = function () {
 
     if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
-   //   cellsVal -= bacteriaVal * cellsVal
+      cellsVal -= bacteriaVal * cellsVal
     } else if (bacteriaRandom >= BACTERIA_HIGH)  {
       bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
-   //   cellsVal -= bacteriaVal * cellsVal
+      cellsVal -= bacteriaVal * cellsVal
 
       if (virusVal >= VIRUS_HIGH) {
-  //      cellsVal -= virusVal * cellsVal
+        cellsVal -= virusVal * cellsVal
       }
     }
 
     const virusRandom = Math.random()
     if (bacteriaRandom >= BACTERIA_HIGH) {
       virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
-  //    healthVal --
+      healthVal --
     } else if (bacteriaRandom > BACTERIA_LOW) {
       virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
     } else {
