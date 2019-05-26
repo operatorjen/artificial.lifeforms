@@ -36,13 +36,13 @@ const VIRUS_HIGH = 0.5
 
 const GRAVITY_X = 0.0
 const GRAVITY_Y = 0.0
-const GROUPS = [50, 100, 50]
+const GROUPS = [50, 50, 50]
 let metaCtx
 let interactorHealth = 1.0
 let interactorInput = 0.0
 let interactorOutput = 0.0
-let pressureSpeed = 0.1
-let pressureViscosity = 1.5
+let pressureSpeed = 0.5
+let pressureViscosity = 0.5
 const MAX_INTERACTOR_INPUT = 0.09
 const MAX_INTERACTOR_OUTPUT = 1.05
 let canvas = canvasPressure
