@@ -338,7 +338,7 @@ const fluid = function () {
       sideEffectBy.textContent = experiences[experiences.length - 1][1]
       complete = true
      // metaCtx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-  
+      btn.click()
     } else {
       ttl.textContent = ttlVal
       ttlVal++
