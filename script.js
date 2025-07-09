@@ -1,164 +1,443 @@
-let $=s=>document.querySelector(s),
- p=$('#pressure input'), c=$('#cells input'), b=$('#bacteria input'), v=$('#virus input'),
- h=$('#health span'), T=$('#time span'),
- cv=$('#pressure-cv'), ctx=cv.getContext('2d'),
- F=$('#final'), R=$('#rebirth'), X=$('#reset'),
- rs=$('#rebirths span'), d=$('#death-by'), sB=$('#side-effect-by'),
- P=0.6, C=0.9, B=1e-4, V=1e-4, H=100, t=0
-p.value=P; c.value=C; b.value=B; v.value=V
-const PM=0.3, PX=0.99, CM=0.2, CX=0.999,
-      BL=0.02, BH=0.6, VL=0.002, VH=0.5,
-      GX=0, GY=0, G=[50,50,50]
-let m, iH=1, iI=0, iO=0, sP=0.5, sV=0.5, MI=0.09, MO=1.05, A=1, CPL=0
-const SK={0:[1,5,8,12],1:[0,2,6,7,9,10],2:[1,4,5,11],3:[3,4]},
-      OP=['running','teaching','swimming','sleeping','meditating','writing','hiking','stretching','interpreting','climbing','fighting','reading','screaming'],
-      SE=['injured','ill','tired','moody','relieved','relaxed','neutral','energetic']
-let Xp=[]
-function st(){
-  let s=Math.random()*SE.length|0,
-      k=Math.random()*4|0,
-      op=OP[SK[k][Math.random()*SK[k].length|0]]
-  Xp.push([op,SE[s]])
-  s<3?C-=2e-6:s>3&&(C+=2.5e-6)
-  if(s==1){V+=1e-4;B+=1e-4}
+let canvasPressure = document.querySelector('#pressure-cv'), ctxPressure = canvasPressure.getContext('2d'),
+    final = document.querySelector('#final'), btn = document.querySelector('#rebirth'), btnReset = document.querySelector('#reset'), rebirths = document.querySelector('#rebirths span'), deathBy = document.querySelector('#death-by'),
+    sideEffectBy = document.querySelector('#side-effect-by')
+const PRESSURE_MIN = 0.3, PRESSURE_MAX = 0.99, CELL_MIN = 0.2, CELL_MAX = 0.999, BACTERIA_LOW = 0.02, 
+      BACTERIA_HIGH = 0.6, VIRUS_LOW = 0.002, VIRUS_HIGH = 0.5, GRAVITY_X = 0.01, GRAVITY_Y = 0.01, 
+      GROUPS = [50, 50, 50], MAX_INTERACTOR_INPUT = 0.09, MAX_INTERACTOR_OUTPUT = 1.05
+let metaCtx, interactorHealth = 1.0, interactorInput = 0.0, interactorOutput = 0.0, pressureSpeed = 0.5,
+    pressureViscosity = 0.5, canvas = canvasPressure, alive = true, complete = false, pressureVal = 0.6,
+    cellsVal = 0.9, bacteriaVal = 0.0001, virusVal = 0.0001, healthVal = 100, ttlVal = 0
+
+p.value = pressureVal
+c.value = cellsVal
+b.value = bacteriaVal
+v.value = virusVal
+
+const SKILLS = {
+  0: [1, 5, 8, 12], // speaking
+  1: [0, 2, 6, 7, 9, 10], // moving
+  2: [1, 4, 5, 11], // thinking
+  3: [3, 4] // resting
 }
-let tX={}, S=0
-const f=(()=>{
-  let W,Ht,sp,rad,lim,nX,nY,Ps,grid,NP,th=10
-  const setH=CV=>{
-    for(let i=0;i<G.length;i++){
-      let col=`hsla(${(V/B*35|0)+40},13%,35%`,
-          col2=`hsla(${(CV*10|0)+11},83%,20%`
-      if(t>500&&t<=1e3) col2=`hsla(${(V/B/t*45|0)+160},73%,45%`
-      else if(t>1e3&&t<=1.5e3) col2=`hsla(${(CV*15|0)+30},63%,45%`
-      else if(t>1.5e3&&t<=2e3){col=`hsla(${(V/B*205|0)+70},63%,45%`;col2=`hsla(${(CV*20|0)+240},60%,85%`}
-      else if(t>2e3&&t<=2.5e3){col=`hsla(${(V/B*115|0)},33%,45%`;col2=`hsla(${(CV*210|0)+51},83%,35%`}
-      else if(t>2.5e3&&t<=3e3){col=`hsla(${(V/B*185|0)+10},53%,65%`;col2=`hsla(${(CV*215|0)+110},63%,45%`}
-      else if(t>3e3&&t<=3.5e3){col=`hsla(${(V/B*115|0)+10},93%,45%`;col2=`hsla(${(CV*210|0)+51},83%,70%`}
-      else if(t>3.5e3&&t<=4e3){col=`hsla(${(V/B*315|0)+10},83%,55%`;col2=`hsla(${(CV*221|0)+211},93%,20%`}
-      else if(t>4e3&&t<=4.5e3){col=`hsla(${(V/B*35|0)+110},13%,5%`;col2=`hsla(${(CV*130|0)+70},73%,50%`}
-      else if(t>4.5e3){col=`hsla(${(V/B*15|0)+110},33%,45%`;col2=`hsla(${(CV*100|0)+110},73%,80%`}
-      if(!S||!tX[i]){tX[i]=document.createElement('canvas');tX[i].width=tX[i].height=C*Math.random()*500+200;S=1}
-      let nc=tX[i].getContext('2d')
-      nc.clearRect(0,0,W,Ht)
-      let g=nc.createRadialGradient(rad,rad,0.8,rad,rad,rad)
-      g.addColorStop(0,col2+',1)');g.addColorStop(.9,col+',.05)')
-      nc.fillStyle=g;nc.beginPath();nc.arc(rad,rad,rad,0,Math.PI*2);nc.fill()
+
+const OPPORTUNITIES = {
+  0: 'running',
+  1: 'teaching',
+  2: 'swimming',
+  3: 'sleeping',
+  4: 'meditating',
+  5: 'writing',
+  6: 'hiking',
+  7: 'stretching',
+  8: 'interpreting',
+  9: 'climbing',
+  10: 'fighting',
+  11: 'reading',
+  12: 'screaming'
+}
+
+const SIDE_EFFECTS = {
+  0: 'injured',
+  1: 'ill',
+  2: 'tired',
+  3: 'moody',
+  4: 'relieved',
+  5: 'relaxed',
+  6: 'neutral',
+  7: 'energetic'
+}
+
+let experiences = []
+
+function setStatus () {
+  const sideEffect = Math.floor(Math.random() * Object.keys(SIDE_EFFECTS).length)
+  const skill = Math.floor(Math.random() * Object.keys(SKILLS).length)
+  const status = OPPORTUNITIES[SKILLS[skill][Math.floor(Math.random() * SKILLS[skill].length)]]
+  experiences.push([status, SIDE_EFFECTS[sideEffect]])
+
+  if (sideEffect < 3) {
+    cellsVal -= 0.000002
+  } else if (sideEffect > 3) {
+    cellsVal += 0.0000025
+  }
+  
+  if (sideEffect === 1) {
+    virusVal += 0.0001
+    bacteriaVal += 0.0001
+  }
+}
+
+let textures = {}
+let started = false
+
+const fluid = function () {
+  let width, height, numX, numY, particles,
+      grid, numParticles
+
+  let threshold = 10
+  const spacing = canvas.width / canvas.height * 10
+  const radius = canvas.width / canvas.height * 20
+  const limit = radius
+  
+  const setHealth = function (cellsVal) {
+    for (let i = 0; i < GROUPS.length; i++) {
+      let color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 40}, 13%, 35%`
+      let color2 = `hsla(${Math.round(cellsVal * 10) + 11}, 83%, 20%`
+
+      if (ttlVal > 500 && ttlVal <= 1000) {
+        color2 = `hsla(${Math.round(virusVal / bacteriaVal / ttlVal * 45) + 160}, 73%, 45%`
+      } else if (ttlVal > 1000 && ttlVal <= 1500) {
+        color2 = `hsla(${Math.round(cellsVal * 15) + 30}, 63%, 45%`
+      } else if (ttlVal > 1500 && ttlVal <= 2000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 205) + 70}, 63%, 45%`
+        color2 = `hsla(${Math.round(cellsVal * 20) + 240}, 60%, 85%`
+      } else if (ttlVal > 2000 && ttlVal <= 2500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115)}, 33%, 45%`
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 35%`
+      } else if (ttlVal > 2500 && ttlVal <= 3000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 185) + 10}, 53%, 65%`
+        color2 = `hsla(${Math.round(cellsVal * 215) + 110}, 63%, 45%`
+      } else if (ttlVal > 3000 && ttlVal <= 3500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 115) + 10}, 93%, 45%`
+        color2 = `hsla(${Math.round(cellsVal * 210) + 51}, 83%, 70%`
+      } else if (ttlVal > 3500 && ttlVal <= 4000) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 315) + 10}, 83%, 55%`
+        color2 = `hsla(${Math.round(cellsVal * 221) + 211}, 93%, 20%`
+      } else if (ttlVal > 4000 && ttlVal <= 4500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 35) + 110}, 13%, 5%`
+        color2 = `hsla(${Math.round(cellsVal * 130) + 70}, 73%, 50%`
+      } else if (ttlVal > 4500) {
+        color = `hsla(${Math.round(virusVal / bacteriaVal * 15) + 110}, 33%, 45%`
+        color2 = `hsla(${Math.round(cellsVal * 100) + 110}, 73%, 80%`
+      }
+
+      if (!started || !textures[i]) {
+        textures[i] = document.createElement('canvas')
+        textures[i].width = textures[i].height = cellsVal * Math.random() * 600 + 200
+        started = true
+      }
+      
+      if (textures[i]) {
+        const nctx = textures[i].getContext('2d')
+        nctx.clearRect(0, 0, width, height)
+        const grad = nctx.createRadialGradient(
+          radius, radius, 0.8,
+          radius, radius, radius)
+        grad.addColorStop(0, color2 + ', 1)')
+        grad.addColorStop(0.9, color + ', 0.05)')
+        nctx.fillStyle = grad
+        nctx.beginPath()
+        nctx.arc(radius, radius, radius, 0, Math.PI * 2, true)
+        nctx.closePath()
+        nctx.fill()
+      }
     }
   }
-  const run=()=>{
-    P=Math.sin(P*(C/P))
-    C=Math.cos((P-(B*V))*C)
-    let bR=Math.random(),vR=Math.random()
-    if(bR>BL&&bR<BH){B=Math.sin(B+(C/(bR*2500)));C-=B*C}
-    else if(bR>=BH){B=Math.sin(B+(C/(bR*1000)));C-=B*C;V>=VH&&(C-=V*C)}
-    if(bR>=BH){V=Math.sin(V+(B*(vR*1000)));H--}
-    else if(bR>BL) V=Math.sin(V-(B*(vR*1000)))
-    else V=Math.sin(V+(B*(vR*1000)))
-    if(P<0||isNaN(P)){p.classList.add('critical');P=0;A=0}
-    if(C<1e-6||isNaN(C)){c.classList.add('critical');C=0;A=0}
-    B<1e-6&&(B=1e-6);V<1e-6&&(V=1e-6)
-    p.value=P.toFixed(7);c.value=C.toFixed(7);b.value=B.toFixed(7);v.value=V.toFixed(7)
-    if((P<PM||P>=PX)&&(B>=BH||V>=VL)){
-      C<CM?(c.classList.add('critical'),H-=P/100/C):c.classList.remove('critical')
-      P>=PX&&(p.classList.add('critical'),H-=P/500/C)
-      V>=VH&&(v.classList.add('critical'),H-=P/100/V)
-      P<1e-4&&(p.classList.add('critical'),H=0,A=0)
+
+  const run = function () {
+    pressureVal = Math.sin(pressureVal * (cellsVal / pressureVal))
+    cellsVal = Math.cos((pressureVal - (bacteriaVal * virusVal)) * cellsVal)
+
+    const bacteriaRandom = Math.random()
+
+    if (bacteriaRandom > BACTERIA_LOW && bacteriaRandom < BACTERIA_HIGH) {
+      bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 2500)))
+      cellsVal -= bacteriaVal * cellsVal
+    } else if (bacteriaRandom >= BACTERIA_HIGH)  {
+      bacteriaVal = Math.sin(bacteriaVal + (cellsVal / (bacteriaRandom * 1000)))
+      cellsVal -= bacteriaVal * cellsVal
+
+      if (virusVal >= VIRUS_HIGH) {
+        cellsVal -= virusVal * cellsVal
+      }
     }
-    V<VH?v.classList.remove('critical'):v.classList.add('critical')
-    B<BH?b.classList.remove('critical'):b.classList.add('critical')
-    (P>=PM&&P<PX&&C>CM&&C<CX)&&(p.classList.remove('critical'),c.classList.remove('critical'),H+=P*C/(B/V))
-    C<CM&&(c.classList.add('critical'),H=0)
-    H>=1&&A&&t%10==0&&st()
-    for(let i=0;i<nX*nY;i++)grid[i].l=0
-    for(let i=NP;i--;)Ps[i].f1()
-    for(let i=NP;i--;)Ps[i].f2()
-    for(let i=NP;i--;)Ps[i].f1()
-    let img=m.getImageData(0,0,W,Ht)
-    for(let i=0,n=img.data.length;i<n;i+=2) img.data[i+2]<th&&(img.data[i+1]/=2)
-    ctx.putImageData(img,0,0)
-    setH(C)
-    if(!A&&!CPL){
-      h.textContent='no';T.textContent=t;R.disabled=''
-      let A2=JSON.parse(localStorage.getItem('levvvels-avg-arr'))||[];A2.push(t)
-      let tot=A2.reduce((a,b)=>a+b,0)
-      localStorage.setItem('levvvels-avg-curr',tot/A2.length)
-      localStorage.setItem('levvvels-avg-arr',JSON.stringify(A2))
-      localStorage.setItem('levvvels-experiences',JSON.stringify(Xp))
-      F.querySelector('.ttl span').textContent=t
-      F.querySelector('.lifespan span').textContent=(tot/A2.length).toFixed(2)
-      F.querySelector('.rebirths span').textContent=A2.length
-      F.querySelector('#experiences').innerHTML=Xp.map(e=>`<p>${e[0]} <em>${e[1]}</em></p>`)
-      F.classList.remove('hidden')
-      d.textContent=Xp[Xp.length-1][0];sB.textContent=Xp[Xp.length-1][1]
-      CPL=1
+
+    const virusRandom = Math.random()
+    if (bacteriaRandom >= BACTERIA_HIGH) {
+      virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
+      healthVal--
+    } else if (bacteriaRandom > BACTERIA_LOW) {
+      virusVal = Math.sin(virusVal - (bacteriaVal * (virusRandom * 1000)))
     } else {
-      T.textContent=t; t++; requestAnimationFrame(run)
+      virusVal = Math.sin(virusVal + (bacteriaVal * (virusRandom * 1000)))
+    }
+
+    if (pressureVal < 0.0 || isNaN(pressureVal)) {
+      pressure.classList.add('critical')
+      pressureVal = 0.0
+      alive = false
+    }
+
+    if (cellsVal < 0.00001 || isNaN(cellsVal)) {
+      c.classList.add('critical')
+      cellsVal = 0.0
+      alive = false
+    }
+
+    if (bacteriaVal < 0.00001 || isNaN(bacteriaVal)) bacteriaVal = 0.00001
+    if (virusVal < 0.00001 || isNaN(virusVal)) virusVal = 0.00001
+
+    p.value = pressureVal; c.value = cellsVal; b.value = bacteriaVal; v.value = virusVal
+
+    if ((pressureVal < PRESSURE_MIN || pressureVal >= PRESSURE_MAX) &&
+        (bacteriaVal >= BACTERIA_HIGH || virusVal >= VIRUS_LOW)) {
+      if (cellsVal < CELL_MIN) {
+        c.classList.add('critical')
+        healthVal = healthVal - (pressureVal / 100 / cellsVal)
+      } else {
+        c.classList.remove('critical')
+      }
+
+      if (pressureVal >= PRESSURE_MAX) {
+        pressure.classList.add('critical')
+        healthVal = healthVal - (pressureVal / 500 / cellsVal)
+      }
+
+      if (virusVal >= VIRUS_HIGH) {
+        v.classList.add('critical')
+        healthVal = healthVal - (pressureVal / 100 / virusVal)
+      }
+
+      if (pressureVal < 0.0001) {
+        pressure.classList.add('critical')
+        healthVal = 0
+        alive = false
+      }
+    }
+
+    if (virusVal < VIRUS_HIGH) {
+      v.classList.remove('critical')
+    } else {
+      v.classList.add('critical')
+    }
+
+    if (bacteriaVal < BACTERIA_HIGH) {
+      b.classList.remove('critical')
+    } else {
+      b.classList.add('critical')
+    }
+
+    if ((pressureVal >= PRESSURE_MIN && pressureVal < PRESSURE_MAX) &&
+        (cellsVal > CELL_MIN && cellsVal < CELL_MAX)) {
+      pressure.classList.remove('critical')
+      c.classList.remove('critical')
+      healthVal = healthVal + ((pressureVal * cellsVal) / (bacteriaVal / virusVal))
+    }
+
+    if (cellsVal < CELL_MIN) {
+      c.classList.add('critical')
+      healthVal = 0.0
+    }
+
+    if (healthVal >= 1 && alive) {
+      if (ttlVal % 10 === 0) {
+        setStatus()
+      }
+    }
+
+    for (let i = 0, l = numX * numY; i < l; i++) {
+      grid[i].length = 0
+    }
+
+    let i = numParticles
+
+    while (i--) {
+      particles[i].firstProcess()
+      particles[i].secondProcess()
+      particles[i].firstProcess()
+    }
+
+    const imageData = metaCtx.getImageData(0, 0, width, height)
+
+    for (let i = 0, n = imageData.data.length; i < n; i += 2) {
+      (imageData.data[i + 2] < threshold) && (imageData.data[i + 1] /= 2)
+    }
+
+    ctxPressure.putImageData(imageData, 0, 0)  
+    setHealth(cellsVal, bacteriaVal, virusVal)
+
+    if (!alive && !complete) {
+      h.textContent = 'no'
+      t.textContent = ttlVal
+      btn.disabled = ''
+
+      let avgs = JSON.parse(localStorage.getItem('levvvels-avg-arr')) || []
+      avgs.push(ttlVal)
+      const total = avgs.reduce((a, b) => a + b, 0)
+      localStorage.setItem('levvvels-avg-curr', total / avgs.length)
+      localStorage.setItem('levvvels-avg-arr', JSON.stringify(avgs))
+      localStorage.setItem('levvvels-experiences', JSON.stringify(experiences))
+      final.querySelector('.ttl span').textContent = ttlVal
+      final.querySelector('.lifespan span').textContent = (total / avgs.length).toFixed(2)
+      final.querySelector('.rebirths span').textContent = avgs.length
+      final.querySelector('#experiences').innerHTML = experiences.map(e => `<p>${e[0]} <em>${e[1]}</em></p>`)
+      final.classList.remove('hidden')
+      deathBy.textContent = experiences[experiences.length - 1][0]
+      sideEffectBy.textContent = experiences[experiences.length - 1][1]
+      complete = true
+    } else {
+      t.textContent = ttlVal
+      ttlVal++
+      requestAnimationFrame(run)
     }
   }
-  const Pcl=function(t,x,y){this.t=t;this.x=x;this.y=y;this.px=x;this.py=y;this.vx=0;this.vy=0}
-  Pcl.prototype.f1=function(){
-    let cell=grid[(this.y/sp|0)*nX+(this.x/sp|0)]
-    cell&&(cell.a[cell.l++]=this)
-    this.vx=this.x-this.px; this.vy=this.y-this.py
-    let dx=this.x-Math.random()*W, dy=this.y-Math.random()*Ht, d=Math.hypot(dx,dy)
-    if(d<rad){let co=dx/d, si=dy/d; this.vx-=co; this.vy-=si;}
-    this.vx+=GX; this.vy+=GY
-    this.px=this.x; this.py=this.y
-    this.x+=this.vx; this.y+=this.vy
+  const Particle = function (type, x, y) {
+    this.type = type
+    this.x = x
+    this.y = y
+    this.px = x
+    this.py = y
+    this.vx = 0
+    this.vy = 0
   }
-  Pcl.prototype.f2=function(){
-    let FA=0, FB=0, cx=this.x/sp|0, cy=this.y/sp|0, close=[]
-    for(let ox=-1;ox<2;ox++)for(let oy=-1;oy<2;oy++){
-      let cell=grid[(cy+oy)*nX+(cx+ox)]
-      if(cell&&cell.l)for(let i=0;i<cell.l;i++){
-        let o=cell.a[i]
-        if(o!==this){
-          let dfx=o.x-this.x, dfy=o.y-this.y, dd=Math.hypot(dfx,dfy)
-          if(dd<sp){
-            let m=1-dd/sp; FA+=m*m; FB+=m*m*m/2
-            o.m=m; o.dfx=dfx/dd*m; o.dfy=dfy/dd*m; close.push(o)
+
+  Particle.prototype.firstProcess = function () {
+    const g = grid[Math.round(this.y / spacing) * numX + Math.round(this.x / spacing)]
+    if (g) {
+      g.close[g.length++] = this
+    }
+
+    this.vx = this.x - this.px
+    this.vy = this.y - this.py
+
+    const distX = this.x - Math.random() * width, distY = this.y - Math.random() * height, dist = Math.sqrt(distX * distX + distY * distY)
+
+    if (dist < radius) {
+        const cos = distX / dist
+        const sin = distY / dist
+        this.vx += -cos
+        this.vy += -sin
+    }
+
+    this.vx += GRAVITY_X
+    this.vy += GRAVITY_Y
+    this.px = this.x
+    this.py = this.y
+    this.x += this.vx
+    this.y += this.vy
+  }
+
+  Particle.prototype.secondProcess = function () {
+    let forceA = 0, forceB = 0, cellX = Math.round(this.x / spacing), cellY = Math.round(this.y / spacing), close = []
+
+    for (let xOff = -1; xOff < 2; xOff++) {
+      for (let yOff = -1; yOff < 2; yOff++) {
+        const cell = grid[(cellY + yOff) * numX + (cellX + xOff)]
+
+        if (cell && cell.length) {
+          for (let a = 0; a < cell.length; a++) {
+            let particle = cell.close[a]
+
+            if (particle !== this) {
+              const dfx = particle.x - this.x, dfy = particle.y - this.y, distance = Math.sqrt(dfx * dfx + dfy * dfy)
+
+              if (distance < spacing) {
+                const m = 1 - (distance / spacing)
+                forceA += Math.pow(m, 2)
+                forceB += Math.pow(m, 3) / 2
+                particle.m = m
+                particle.dfx = (dfx / distance) * m
+                particle.dfy = (dfy / distance) * m
+                close.push(particle)
+              }
+            }
           }
         }
       }
     }
-    FA=(FA-2)*.99
-    for(let o of close){
-      let pr=FA+FB*o.m
-      this.t!==o.t&&(pr*=.96*P)
-      let dx=o.dfx*pr, dy=o.dfy*pr
-      o.x+=dx; o.y+=dy
-      this.x-=dx; this.y-=dy
+
+    forceA = (forceA - 2) * 0.99
+
+    for (let i = 0; i < close.length; i++) {
+      const neighbor = close[i]
+      let press = forceA + forceB * neighbor.m
+
+      if (this.type !== neighbor.type) {
+        press *= 0.96 * pressureVal
+      }
+
+      const dx = neighbor.dfx * press, dy = neighbor.dfy * press
+      neighbor.x += dx
+      neighbor.y += dy
+      this.x -= dx
+      this.y -= dy
     }
-    this.x=this.x<lim?lim:this.x>W-lim?W-lim:this.x
-    this.y=this.y<lim?lim:this.y>Ht-lim?Ht-lim:this.y
+
+    if (this.x < limit) {
+      this.x = limit
+    } else if (this.x > width - limit) {
+      this.x = width - limit
+    }
+
+    if (this.y < limit) {
+      this.y = limit
+    } else if (this.y > height - limit) {
+      this.y = height - limit
+    }
+
     this.draw()
   }
-  Pcl.prototype.draw=function(){
-    let s=rad*10
-    m.drawImage(tX[this.t],this.x-rad,this.y-rad,s,s)
+
+  Particle.prototype.draw = function () {
+    const size = radius * 10
+    metaCtx.drawImage(
+      textures[this.type],
+      this.x - radius,
+      this.y - radius,
+      size, size)
   }
+
   return {
-    init:()=>{
-      Ps=[]; grid=[]
-      cv.height=Ht=window.innerHeight/2
-      cv.width=W=window.innerWidth/2
-      let mc=document.createElement('canvas')
-      mc.width=W; mc.height=Ht; m=mc.getContext('2d')
-      sp=W/Ht*10; rad=W/Ht*20; lim=rad
-      setH(C)
-      nX=W/sp|0; nY=Ht/sp|0
-      for(let i=0;i<nX*nY;i++)grid[i]={l:0,a:[]}
-      for(let i=0;i<G.length;i++)for(let k=G[i];k--;)Ps.push(new Pcl(i,Math.random()*W,Math.random()*Ht))
-      NP=Ps.length
+    init: function () {
+      particles = []
+      grid = []
+      close = []
+
+      canvas.height = height = innerHeight / 2, canvas.width = width = innerWidth / 2
+      const metaCanvas = document.createElement('canvas')
+      metaCanvas.width = width
+      metaCanvas.height = height
+      metaCtx = metaCanvas.getContext('2d')
+      setHealth(cellsVal, bacteriaVal, virusVal)
+
+      numX = Math.round(width / spacing)
+      numY = Math.round(height / spacing)
+
+      for (let i = 0; i < numX * numY; i++) {
+        grid[i] = {
+          length: 0,
+          close: []
+        }
+      }
+
+      for (let i = 0; i < GROUPS.length; i++) {
+        for (let k = 0; k < GROUPS[i]; k++) {
+          particles.push(
+            new Particle(
+              i,
+              Math.random() * innerWidth,
+              Math.random() * innerHeight))
+        }
+      }
+
+      numParticles = particles.length
       run()
     }
   }
-})()
-f.init()
-R.onclick=()=>location.reload()
-X.onclick=()=>{localStorage.clear();R.click()}
-window.onresize=()=>{
-  m.clearRect(0,0,window.innerWidth,window.innerHeight)
-  ctx=cv.getContext('2d')
+}()
+
+fluid.init()
+
+btn.onclick = function () {
+  document.location.reload()
+}
+
+btnReset.onclick = function () {
+  localStorage.clear()
+  btn.click()
+}
+
+onresize = function () {
+  metaCtx.clearRect(0, 0, innerWidth, innerHeight)
+  ctxPressure = canvas.getContext('2d')
 }
