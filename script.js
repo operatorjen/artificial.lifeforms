@@ -14,10 +14,10 @@ b.value = bacteriaVal
 v.value = virusVal
 
 const SKILLS = {
-  0: [1, 5, 8, 12], // speaking
-  1: [0, 2, 6, 7, 9, 10], // moving
-  2: [1, 4, 5, 11], // thinking
-  3: [3, 4] // resting
+  0: [1, 5, 8, 12],
+  1: [0, 2, 6, 7, 9, 10],
+  2: [1, 4, 5, 11],
+  3: [3, 4]
 }
 
 const OPPORTUNITIES = {
