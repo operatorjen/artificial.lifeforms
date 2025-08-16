@@ -139,6 +139,7 @@ button#reset {
 
 #world {
   background: linear-gradient(45deg, rgba(46, 234, 121, 0.677), rgba(1, 1, 1, 0));
+  box-shadow: rgba(29, 15, 238, 0.4) 2px 2px 2px;
 }
 
 #motifs span {
@@ -147,4 +148,7 @@ button#reset {
 
 #knobs li {
   background-color: rgb(78, 27, 10);
+  background: radial-gradient(circle at 80% 10%, rgba(95, 32, 255, 0.7) 20%, rgba(39, 32, 255, 0.3) 100%);
+  box-shadow: rgba(36, 103, 10, 0.58) -13px -2px 2px;
+  color: #0cdae9;
 }
