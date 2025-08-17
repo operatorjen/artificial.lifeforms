@@ -140,6 +140,7 @@ button#reset {
 #world {
   background: linear-gradient(45deg, rgba(46, 234, 121, 0.677), rgba(1, 1, 1, 0));
   box-shadow: rgba(29, 15, 238, 0.4) 2px 2px 2px;
+  inset: 10vh 10vh 10vw 30vh;
 }
 
 #motifs span {

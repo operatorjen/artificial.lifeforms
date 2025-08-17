@@ -12,7 +12,7 @@ const PRESSURE_MIN = 0.3, PRESSURE_MAX = 0.99,
       BACTERIA_LOW = 0.02, BACTERIA_HIGH = 0.6,
       VIRUS_LOW = 0.002,   VIRUS_HIGH   = 0.5,
       GRAVITY_X = 0.01,    GRAVITY_Y    = 0.01,
-      GROUPS = [60, 60, 60],
+      GROUPS = [30, 30, 30],
       MAX_INTERACTOR_INPUT = 0.09, MAX_INTERACTOR_OUTPUT = 1.05;
 
 let metaCtx,
@@ -243,7 +243,6 @@ const fluid = (function () {
     for (let i = numParticles - 1; i >= 0; i--) {
       particles[i].firstProcess();
       particles[i].secondProcess();
-       
     }
 
     // post-process pixels on offscreen, then blit
@@ -338,7 +337,7 @@ const fluid = (function () {
                 const m = 1 - (dist * invSpacing);
                 const m2 = m * m;
                 forceA += m2;
-                forceB += m2 * m * 0.5;
+                forceB += m2 * m * 0.8;
                 const inv = dist ? 1 / dist : 0;
                 particle.m   = m;
                 particle.dfx = dfx * inv * m;
