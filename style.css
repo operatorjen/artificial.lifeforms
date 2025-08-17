@@ -152,3 +152,8 @@ button#reset {
   box-shadow: rgba(36, 103, 10, 0.58) -13px -2px 2px;
   color: #0cdae9;
 }
+
+#home:hover {
+  background-color: rgba(8, 83, 181, 0.8);
+  color: rgb(255, 152, 100);
+}
